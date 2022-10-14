@@ -2,9 +2,10 @@
 import os
 import random
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from inspirational_quotes_generator import constants
+from inspirational_quotes_generator.entities.generation_options import GenerationOptions
 from inspirational_quotes_generator.helpers.pillow_text import fit_text
 
 backgrounds_categories: list[str] = [
@@ -39,20 +40,24 @@ def get_random_background_filename_by_category(background_category: str) -> str:
     return random.choice(backgrounds)
 
 
-def generate_picture(text: str, filename: str, background_category: str) -> None:
+def generate_picture(options: GenerationOptions) -> None:
     """Generate and save a picture with the given filename for a given text and category."""
-    with Image.open(f"{constants.PICTURES_PATH}/{background_category}/1.jpg") as image:
+    with Image.open(
+        f"{constants.PICTURES_PATH}/{options.background_category}/{get_random_background_filename_by_category(options.background_category)}"
+    ) as image:
         width = image.width
         height = image.height
 
-        font = _get_font_for_picture(width)
+        if options.blur:
+            image = image.filter(ImageFilter.GaussianBlur(5))
 
         draw = ImageDraw.Draw(image)
 
-        font, fitted_text = fit_text(font, text, width - 200, height - 200)
+        font = _get_font_for_picture(width)
+        font, fitted_text = fit_text(font, options.text, width - 200, height - 200)
 
         draw.multiline_text(
             (width / 2, height / 2), fitted_text, anchor="mm", align="center", font=font
         )
 
-        image.save(filename)
+        image.save(options.filename)

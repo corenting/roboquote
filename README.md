@@ -20,6 +20,8 @@ Generate random "inspirational" quotes pictures by using the [bloom language mod
 2. Set an environment variable `HUGGING_FACE_API_TOKEN` with your Hugging Face Inference API token. The project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files)
 3. Run `poetry run python main.py my_file.jpg` to generate a new random picture
 
+See `poetry run python main.py --help` for the available options.
+
 ## Credits
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)

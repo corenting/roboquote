@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "inspirational-quotes-generator"
+version = "0.1.0"
+description = "A generator of inspirational quotes"
+authors = ["corenting <corenting@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "inspirational_quotes_generator"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = "^0.6.1"
+pillow = "^9.2.0"
+environs = "^9.5.0"
+requests = "^2.28.1"
+nltk = "^3.7"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+flake8 = "*"
+flake8-docstrings = "*"
+isort = "*"
+mypy = "*"
+pdbpp = "*"
+pyproject-flake8 = "*"
+types-requests = "*"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+
+[tool.flake8]
+max_line_length = 88
+extend-ignore = "E501"
+per-file-ignores = ["__init__.py:F401"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

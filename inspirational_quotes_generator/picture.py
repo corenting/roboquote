@@ -45,7 +45,6 @@ def generate_picture(text: str, filename: str, background_category: str) -> None
         width = image.width
         height = image.height
 
-
         font = _get_font_for_picture(width)
 
         draw = ImageDraw.Draw(image)

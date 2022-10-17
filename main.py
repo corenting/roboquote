@@ -1,12 +1,9 @@
 """Main CLI entrypoint."""
 import typer
 
-from inspirational_quotes_generator.entities.generation_options import GenerationOptions
-from inspirational_quotes_generator.picture import (
-    generate_picture,
-    get_random_background_category,
-)
-from inspirational_quotes_generator.quote import get_random_quote
+from roboquote.entities.generation_options import GenerationOptions
+from roboquote.picture import generate_picture, get_random_background_category
+from roboquote.quote import get_random_quote
 
 app = typer.Typer()
 

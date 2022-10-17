@@ -4,9 +4,9 @@ import random
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-from inspirational_quotes_generator import constants
-from inspirational_quotes_generator.entities.generation_options import GenerationOptions
-from inspirational_quotes_generator.helpers.pillow_text import fit_text
+from roboquote import constants
+from roboquote.entities.generation_options import GenerationOptions
+from roboquote.helpers.pillow_text import fit_text
 
 backgrounds_categories: list[str] = [
     name

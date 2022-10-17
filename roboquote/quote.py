@@ -5,7 +5,7 @@ import random
 import nltk
 import requests
 
-from inspirational_quotes_generator import config, constants
+from roboquote import config, constants
 
 
 def _get_random_prompt(background_category: str) -> str:

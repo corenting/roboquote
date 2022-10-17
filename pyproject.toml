@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "inspirational-quotes-generator"
+name = "roboquote"
 version = "0.1.0"
 description = "A generator of inspirational quotes"
 authors = ["corenting <corenting@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "inspirational_quotes_generator"}]
+packages = [{include = "roboquote"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

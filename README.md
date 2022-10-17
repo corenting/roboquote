@@ -1,12 +1,12 @@
-# inspirational-quotes-generator
+# roboquote
 
 Generate random "inspirational" quotes pictures by using the [bloom language model](https://huggingface.co/bigscience/bloom) through the Hugging Face Inference API.
 
 ## Examples
 
-<img src="https://github.com/corenting/inspirational-quotes-generator/raw/master/doc/examples/1.jpg" width="500">
-<img src="https://github.com/corenting/inspirational-quotes-generator/raw/master/doc/examples/2.jpg" width="500">
-<img src="https://github.com/corenting/inspirational-quotes-generator/raw/master/doc/examples/3.jpg" width="500">
+<img src="https://github.com/corenting/roboquote/raw/master/doc/examples/1.jpg" width="500">
+<img src="https://github.com/corenting/roboquote/raw/master/doc/examples/2.jpg" width="500">
+<img src="https://github.com/corenting/roboquote/raw/master/doc/examples/3.jpg" width="500">
 
 ## How it works
 

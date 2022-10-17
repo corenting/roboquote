@@ -1,5 +1,5 @@
 PYTHON=poetry run
-SRC = inspirational_quotes_generator main.py
+SRC = roboquote main.py
 
 .PHONY: init
 .SILENT: init

@@ -5,9 +5,10 @@ import typer
 from loguru import logger
 
 from roboquote import config
+from roboquote.background_picture import get_random_background_category
 from roboquote.entities.generation_options import GenerationOptions
-from roboquote.picture import generate_picture, get_random_background_category
-from roboquote.quote import get_random_quote
+from roboquote.quote_text_generation import get_random_quote
+from roboquote.result_picture import generate_picture
 
 app = typer.Typer()
 
@@ -23,6 +24,7 @@ def generate(
     """Generate a new picture with the given filename."""
     # Get a random background category
     background_category = get_random_background_category()
+    logger.debug(f"Generating a {background_category} themed picture")
 
     # Get text to use
     text = get_random_quote(background_category)

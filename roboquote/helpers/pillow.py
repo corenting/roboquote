@@ -3,10 +3,29 @@
 From https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py by atomicparade (https://github.com/atomicparade) for the text wrapping
 From https://stackoverflow.com/a/61730849 for the dominant color function
 """
+import os
+import random
 from typing import Optional, Tuple
 
+from loguru import logger
 from PIL import Image
-from PIL.ImageFont import FreeTypeFont
+from PIL.ImageFont import FreeTypeFont, truetype
+
+from roboquote import constants
+
+
+def get_font_for_picture(picture_width: int) -> FreeTypeFont:
+    """Get the font with correct size to use for the picture."""
+    fonts = [
+        file for file in os.listdir(f"{constants.FONTS_PATH}/") if file.endswith(".ttf")
+    ]
+
+    font_filename = random.choice(fonts)
+    logger.debug(f"Using {font_filename} for font")
+
+    font_size = picture_width // 25
+    font_path = f"{constants.FONTS_PATH}/{font_filename}"
+    return truetype(font_path, font_size)
 
 
 def get_dominant_color(image: Image) -> tuple[int, int, int, int]:

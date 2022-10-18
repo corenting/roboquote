@@ -3,24 +3,19 @@ import os
 import random
 
 from roboquote import constants
-
-backgrounds_categories: list[str] = [
-    name
-    for name in os.listdir(constants.PICTURES_PATH)
-    if os.path.isdir(os.path.join(constants.PICTURES_PATH, name))
-]
+from roboquote.entities.themes import Theme
 
 
-def get_random_background_category() -> str:
+def get_random_background_theme() -> Theme:
     """Get a random background category."""
-    return random.choice(backgrounds_categories)
+    return random.choice(list(Theme))
 
 
-def get_random_background_filename_by_category(background_category: str) -> str:
+def get_random_background_filename_by_theme(background_theme: Theme) -> str:
     """Get a random background given a category."""
     backgrounds = [
         file
-        for file in os.listdir(f"{constants.PICTURES_PATH}/{background_category}/")
+        for file in os.listdir(f"{constants.PICTURES_PATH}/{background_theme.value}/")
         if file.endswith(".jpg")
     ]
 

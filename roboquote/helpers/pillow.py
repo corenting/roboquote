@@ -23,7 +23,7 @@ def get_font_for_picture(picture_width: int) -> FreeTypeFont:
     font_filename = random.choice(fonts)
     logger.debug(f"Using {font_filename} for font")
 
-    font_size = picture_width // 25
+    font_size = picture_width // 20
     font_path = f"{constants.FONTS_PATH}/{font_filename}"
     return truetype(font_path, font_size)
 

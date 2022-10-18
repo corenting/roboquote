@@ -15,6 +15,7 @@ format:
 .PHONY: style
 .SILENT: style
 style:
+	shellcheck scripts/*.sh
 	$(PYTHON) pflake8 $(SRC)
 	$(PYTHON) mypy -- $(SRC)
 	$(PYTHON) black --check $(SRC)
@@ -23,4 +24,4 @@ style:
 .PHONY: update-examples
 .SILENT: update-examples
 update-examples:
-	doc/examples/update_examples.sh
+	scripts/update_examples.sh

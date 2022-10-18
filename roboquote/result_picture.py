@@ -3,7 +3,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 
 from roboquote import constants
-from roboquote.background_picture import get_random_background_filename_by_category
+from roboquote.background_picture import get_random_background_filename_by_theme
 from roboquote.entities.generation_options import GenerationOptions
 from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_picture
 
@@ -11,7 +11,7 @@ from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_
 def generate_picture(options: GenerationOptions) -> None:
     """Generate and save a picture with the given filename for a given text and category."""
     with Image.open(
-        f"{constants.PICTURES_PATH}/{options.background_category}/{get_random_background_filename_by_category(options.background_category)}"
+        f"{constants.PICTURES_PATH}/{options.background_theme.value}/{get_random_background_filename_by_theme(options.background_theme)}"
     ) as image:
         width = image.width
         height = image.height

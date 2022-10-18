@@ -8,17 +8,22 @@ import requests
 from loguru import logger
 
 from roboquote import config, constants
+from roboquote.entities.themes import Theme
 
 
-def _get_random_prompt(background_category: str) -> str:
+def _get_random_prompt(background_theme: Theme) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a picture of a {background_category}, I write an inspirational sentence such as:",
-        f"On a inspirational picture of a {background_category}, I write an inspirational short sentence such as:",
-        f"On a inspirational picture of a {background_category}, I write a short sentence such as:",
+        f"On a picture of a {background_theme.value}, I write an inspirational sentence such as:",
+        f"On a inspirational picture of a {background_theme.value}, I write an inspirational short sentence such as:",
+        f"On a inspirational picture of a {background_theme.value}, I write a short sentence such as:",
     ]
 
     prompt = random.choice(prompts)
+
+    # Randomly replace sentence with quote
+    if random.randint(0, 1) == 0:
+        prompt = prompt.replace("sentence", "quote")
 
     # Randomly replace picture with photography
     if random.randint(0, 1) == 0:
@@ -42,7 +47,7 @@ def _cleanup_text(generated_text: str) -> str:
     logger.debug(f'Cleaning up quote: "{generated_text}"')
 
     # If the model generated a quoted text, get it directly
-    quoted_text = re.findall(r'["“«\'](.*?)["”»\']', generated_text)
+    quoted_text = re.findall(r'["“«](.*?)["”»]', generated_text)
     if len(quoted_text) > 0:
         logger.debug(f'Cleaned up quote is: "{quoted_text[0]}"')
         return quoted_text[0]
@@ -58,10 +63,11 @@ def _cleanup_text(generated_text: str) -> str:
     return text
 
 
-def get_random_quote(background_category: str) -> str:
+def get_random_quote(background_theme: Theme) -> str:
     """For a given background category, get a random quote."""
     headers = {"Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}"}
-    prompt = _get_random_prompt(background_category)
+    prompt = _get_random_prompt(background_theme)
+    logger.debug(f'Prompt for model: "{prompt}"')
     data = json.dumps(prompt)
 
     response = requests.request(

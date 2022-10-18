@@ -1,9 +1,11 @@
 """Handle the generation of the quote."""
 import json
 import random
+import re
 
 import nltk
 import requests
+from loguru import logger
 
 from roboquote import config, constants
 
@@ -37,15 +39,23 @@ def _cleanup_text(generated_text: str) -> str:
 
     Remove quotes, and limit the text to the first sentence.
     """
-    text: str = generated_text.replace('"', "")
+    logger.debug(f'Cleaning up quote: "{generated_text}"')
 
-    # Tokenize the text and get the first sentence
+    # If the model generated a quoted text, get it directly
+    quoted_text = re.findall(r'["“«\'](.*?)["”»\']', generated_text)
+    if len(quoted_text) > 0:
+        logger.debug(f'Cleaned up quote is: "{quoted_text[0]}"')
+        return quoted_text[0]
+
+    # Else tokenize the text and get the first sentence
     try:
         nltk.data.find("tokenizers/punkt")
     except LookupError:
         nltk.download("punkt")
-    text = nltk.sent_tokenize(text)[0]
-    return text.strip()
+    text = nltk.sent_tokenize(generated_text)[0].strip()
+
+    logger.debug(f'Cleaned up quote is: "{text}"')
+    return text
 
 
 def get_random_quote(background_category: str) -> str:

@@ -1,6 +1,10 @@
 """Main CLI entrypoint."""
-import typer
+import sys
 
+import typer
+from loguru import logger
+
+from roboquote import config
 from roboquote.entities.generation_options import GenerationOptions
 from roboquote.picture import generate_picture, get_random_background_category
 from roboquote.quote import get_random_quote
@@ -34,4 +38,6 @@ def generate(
 
 
 if __name__ == "__main__":
+    logger.remove()
+    logger.add(sys.stderr, level=config.LOG_LEVEL)
     app()

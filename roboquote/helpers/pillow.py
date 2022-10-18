@@ -1,10 +1,20 @@
 """Handle the multiline text wrapping for Pillow operations.
 
-From https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py by atomicparade (https://github.com/atomicparade)
+From https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py by atomicparade (https://github.com/atomicparade) for the text wrapping
+From https://stackoverflow.com/a/61730849 for the dominant color function
 """
 from typing import Optional, Tuple
 
+from PIL import Image
 from PIL.ImageFont import FreeTypeFont
+
+
+def get_dominant_color(image: Image) -> tuple[int, int, int, int]:
+    """Get the dominant color of an image as a tuple."""
+    img = image.copy()
+    img = img.convert("RGBA")
+    img = img.resize((1, 1), resample=0)
+    return img.getpixel((0, 0))
 
 
 def wrap_text(

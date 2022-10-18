@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from roboquote import constants
 from roboquote.entities.generation_options import GenerationOptions
-from roboquote.helpers.pillow_text import fit_text
+from roboquote.helpers.pillow import fit_text, get_dominant_color
 
 backgrounds_categories: list[str] = [
     name
@@ -48,6 +48,20 @@ def generate_picture(options: GenerationOptions) -> None:
         width = image.width
         height = image.height
 
+        # Get dominant background color
+        dominant_bg_r, dominant_bg_g, dominant_bg_b, dominant_bg_a = get_dominant_color(
+            image
+        )
+        if (
+            dominant_bg_r * 0.299
+            + dominant_bg_g * 0.587
+            + dominant_bg_b * 0.114
+            + (1 - dominant_bg_a) * 255
+        ) > 186:
+            text_color = "#000000"
+        else:
+            text_color = "#FFFFFF"
+
         if options.blur:
             image = image.filter(ImageFilter.GaussianBlur(5))
 
@@ -57,7 +71,12 @@ def generate_picture(options: GenerationOptions) -> None:
         font, fitted_text = fit_text(font, options.text, width - 200, height - 200)
 
         draw.multiline_text(
-            (width / 2, height / 2), fitted_text, anchor="mm", align="center", font=font
+            (width / 2, height / 2),
+            fitted_text,
+            anchor="mm",
+            align="center",
+            font=font,
+            fill=text_color,
         )
 
         image.save(options.filename)

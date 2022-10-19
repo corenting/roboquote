@@ -5,3 +5,4 @@ env = Env()
 env.read_env()
 
 HUGGING_FACE_API_TOKEN = env.str("HUGGING_FACE_API_TOKEN")
+LOG_LEVEL = env.str("LOG_LEVEL", "ERROR")

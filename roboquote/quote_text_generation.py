@@ -1,22 +1,29 @@
 """Handle the generation of the quote."""
 import json
 import random
+import re
 
 import nltk
 import requests
+from loguru import logger
 
 from roboquote import config, constants
+from roboquote.entities.themes import Theme
 
 
-def _get_random_prompt(background_category: str) -> str:
+def _get_random_prompt(background_theme: Theme) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a picture of a {background_category}, I write an inspirational sentence such as:",
-        f"On a inspirational picture of a {background_category}, I write an inspirational short sentence such as:",
-        f"On a inspirational picture of a {background_category}, I write a short sentence such as:",
+        f"On a picture of a {background_theme.value}, I write an inspirational sentence such as:",
+        f"On a inspirational picture of a {background_theme.value}, I write an inspirational short sentence such as:",
+        f"On a inspirational picture of a {background_theme.value}, I write a short sentence such as:",
     ]
 
     prompt = random.choice(prompts)
+
+    # Randomly replace sentence with quote
+    if random.randint(0, 1) == 0:
+        prompt = prompt.replace("sentence", "quote")
 
     # Randomly replace picture with photography
     if random.randint(0, 1) == 0:
@@ -37,21 +44,30 @@ def _cleanup_text(generated_text: str) -> str:
 
     Remove quotes, and limit the text to the first sentence.
     """
-    text: str = generated_text.replace('"', "")
+    logger.debug(f'Cleaning up quote: "{generated_text}"')
 
-    # Tokenize the text and get the first sentence
+    # If the model generated a quoted text, get it directly
+    quoted_text = re.findall(r'["“«](.*?)["”»]', generated_text)
+    if len(quoted_text) > 0:
+        logger.debug(f'Cleaned up quote is: "{quoted_text[0]}"')
+        return quoted_text[0]
+
+    # Else tokenize the text and get the first sentence
     try:
         nltk.data.find("tokenizers/punkt")
     except LookupError:
         nltk.download("punkt")
-    text = nltk.sent_tokenize(text)[0]
-    return text.strip()
+    text = nltk.sent_tokenize(generated_text)[0].strip()
+
+    logger.debug(f'Cleaned up quote is: "{text}"')
+    return text
 
 
-def get_random_quote(background_category: str) -> str:
+def get_random_quote(background_theme: Theme) -> str:
     """For a given background category, get a random quote."""
     headers = {"Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}"}
-    prompt = _get_random_prompt(background_category)
+    prompt = _get_random_prompt(background_theme)
+    logger.debug(f'Prompt for model: "{prompt}"')
     data = json.dumps(prompt)
 
     response = requests.request(

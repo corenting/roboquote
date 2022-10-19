@@ -1,0 +1,29 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Handpicked picture informations",
+    "description": "Informations about an handpicked picture",
+    "type": "object",
+    "properties": {
+        "url": {
+            "type": "string"
+        },
+        "author_name": {
+            "type": "string"
+        },
+        "author_username": {
+            "type": "string"
+        },
+        "source": {
+            "type": "string",
+            "enum": [
+                "unsplash"
+            ]
+        }
+    },
+    "required": [
+        "url",
+        "author_name",
+        "author_username",
+        "source"
+    ]
+}

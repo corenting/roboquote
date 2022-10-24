@@ -1,7 +1,7 @@
 """Entity to represent the generation options."""
 from dataclasses import dataclass
 
-from roboquote.entities.themes import Theme
+from PIL import Image
 
 
 @dataclass
@@ -9,8 +9,8 @@ class GenerationOptions:
     """The options when generating a picture."""
 
     text: str
-    filename: str
-    background_theme: Theme
+    output_filename: str
+    background_image: Image
 
     blur: bool
     blur_intensity: int

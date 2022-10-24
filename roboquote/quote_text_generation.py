@@ -8,22 +8,17 @@ import requests
 from loguru import logger
 
 from roboquote import config, constants
-from roboquote.entities.themes import Theme
 
 
-def _get_random_prompt(background_theme: Theme) -> str:
+def _get_random_prompt(background_search_query: str) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a picture of a {background_theme.value}, I write an inspirational sentence such as:",
-        f"On a inspirational picture of a {background_theme.value}, I write an inspirational short sentence such as:",
-        f"On a inspirational picture of a {background_theme.value}, I write a short sentence such as:",
+        f"On a picture of a {background_search_query}, I write an inspirational quote such as:",
+        f"On a inspirational picture of a {background_search_query}, I write an inspirational short quote such as:",
+        f"On a inspirational picture of a {background_search_query}, I write a short quote such as:",
     ]
 
     prompt = random.choice(prompts)
-
-    # Randomly replace sentence with quote
-    if random.randint(0, 1) == 0:
-        prompt = prompt.replace("sentence", "quote")
 
     # Randomly replace picture with photography
     if random.randint(0, 1) == 0:
@@ -57,16 +52,18 @@ def _cleanup_text(generated_text: str) -> str:
         nltk.data.find("tokenizers/punkt")
     except LookupError:
         nltk.download("punkt")
+        print("Missing data downloaded, please relaunch.")
+
     text = nltk.sent_tokenize(generated_text)[0].strip()
 
     logger.debug(f'Cleaned up quote is: "{text}"')
     return text
 
 
-def get_random_quote(background_theme: Theme) -> str:
+def get_random_quote(background_search_query: str) -> str:
     """For a given background category, get a random quote."""
     headers = {"Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}"}
-    prompt = _get_random_prompt(background_theme)
+    prompt = _get_random_prompt(background_search_query)
     logger.debug(f'Prompt for model: "{prompt}"')
     data = json.dumps(prompt)
 

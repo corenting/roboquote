@@ -5,9 +5,11 @@ import typer
 from loguru import logger
 
 from roboquote import config
-from roboquote.background_picture import get_random_background_theme
+from roboquote.background_picture import (
+    get_random_background_from_unsplash_by_theme,
+    get_random_background_search_query,
+)
 from roboquote.entities.generation_options import GenerationOptions
-from roboquote.entities.themes import Theme
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_picture import generate_picture
 
@@ -21,27 +23,26 @@ def generate(
     blur_intensity: int = typer.Option(
         5, help="If blur is enabled,the blur intensity level."
     ),
-    background_theme: Theme = typer.Option(
+    background: str = typer.Option(
         default=None,
-        help="If specified, use this theme for the background picture instead of a random one.",
+        help="If specified, use this string as the search query for the background picture instead of a random one. Works best with simple queries like 'mountain', 'sea' etc.",
     ),
-    # handpicked_background: bool = typer.Option(
-    #    True,
-    #    help="If enabled, use an handpicked background picture instead of a random one from Internet.",
-    # ),
 ) -> None:
     """Generate a new picture with the given filename."""
     # Get a random background category if not specified
-    if background_theme is None:
-        background_theme = get_random_background_theme()
+    if background is None:
+        background = get_random_background_search_query()
+
+    # Get background to use
+    background_image = get_random_background_from_unsplash_by_theme(background)
 
     # Get text to use
-    text = get_random_quote(background_theme)
+    text = get_random_quote(background)
     generate_picture(
         GenerationOptions(
             text=text,
-            filename=filename,
-            background_theme=background_theme,
+            output_filename=filename,
+            background_image=background_image,
             blur=blur,
             blur_intensity=blur_intensity,
         )

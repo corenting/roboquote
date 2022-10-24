@@ -1,5 +1,4 @@
 """Constants used in the code."""
-PICTURES_PATH = "pictures"
 FONTS_PATH = "fonts"
 
 HUGGING_FACE_MODEL = "bigscience/bloom"

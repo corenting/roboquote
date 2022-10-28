@@ -18,7 +18,7 @@ function setStartLoading() {
 function setStopLoading(isError) {
     // Enable submit button
     const submitButtonElement = document.getElementById("form-submit");
-    submitButtonElement.disabled = true;
+    submitButtonElement.disabled = false;
 
     // Hide loading div
     const loadingDivElement = document.getElementById("loading");

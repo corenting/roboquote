@@ -1,5 +1,7 @@
 import sys
+
 from loguru import logger
+
 from roboquote import config
 
 logger.remove()

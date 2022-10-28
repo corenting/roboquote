@@ -1,16 +1,16 @@
 """Entity to represent the generation options."""
 from dataclasses import dataclass
+from typing import Optional
 
 from PIL import Image
 
 
 @dataclass
-class GenerationOptions:
-    """The options when generating a picture."""
+class GenerateOptions:
+    """The options when generating a image."""
 
     text: str
-    output_filename: str
     background_image: Image
 
     blur: bool
-    blur_intensity: int
+    blur_intensity: Optional[int]

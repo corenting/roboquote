@@ -25,3 +25,14 @@ style:
 .SILENT: update-examples
 update-examples:
 	scripts/update_examples.sh
+
+.PHONY: run-web
+.SILENT: run-web
+run-web:
+	$(PYTHON) uvicorn --reload roboquote.web.app:app
+
+.PHONY: build-docker
+.SILENT: build-docker
+build-docker:
+	docker build -t roboquote .
+

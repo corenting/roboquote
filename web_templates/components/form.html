@@ -1,0 +1,22 @@
+<form hx-swap="none" hx-post="/generate/">
+    <button id="form-submit" type="submit">Generate an image 🖼</button>
+
+    <details>
+        <summary>Tweak the parameters</summary>
+
+        <label for="background">
+            Background theme (optional, will be random if not provided)
+            <input type="text" id="background" name="background"
+                placeholder="Try simple terms like &quot;beach&quot;, &quot;sunrise&quot;, &quot;sea&quot;...">
+        </label>
+
+        <!--  <details>
+            <summary>Advanced options</summary>
+            <label for="blur">
+                <input type="checkbox" id="blur" name="blur">
+                Enable background blurring
+            </label>
+        </details> -->
+    </details>
+
+</form>

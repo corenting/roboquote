@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<p id="introduction-text">
+    Generate random "inspirational" quotes pictures (by using the <a href="https://huggingface.co/bigscience/bloom">BLOOM language model</a>).
+</p>
+
+<!-- Form -->
+{% include 'components/form.html' %}
+
+<!-- Loading display -->
+{% include 'components/loading.html' %}
+
+<!-- Error display -->
+{% include 'components/error.html' %}
+
+<!-- Result display -->
+{% include 'components/result.html' %}
+
+{% endblock %}

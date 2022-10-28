@@ -1,13 +1,13 @@
 """Handle the picture-related tasks."""
 
-from PIL import ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter
 
-from roboquote.entities.generation_options import GenerationOptions
-from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_picture
+from roboquote.entities.generate_options import GenerateOptions
+from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_image
 
 
-def generate_picture(options: GenerationOptions) -> None:
-    """Generate and save a picture with the given filename for a given text and category."""
+def generate_image(options: GenerateOptions) -> Image:
+    """Generate and return an image with the given filename for a given text and category."""
     image = options.background_image.copy()
     width = image.width
     height = image.height
@@ -27,11 +27,14 @@ def generate_picture(options: GenerationOptions) -> None:
         text_color = "#FFFFFF"
 
     if options.blur:
-        image = image.filter(ImageFilter.GaussianBlur(5))
+        blur_intensity = (
+            options.blur_intensity if options.blur_intensity is not None else 5
+        )
+        image = image.filter(ImageFilter.GaussianBlur(blur_intensity))
 
     draw = ImageDraw.Draw(image)
 
-    font = get_font_for_picture(width)
+    font = get_font_for_image(width)
     font, fitted_text = fit_text(font, options.text, width - 200, height - 200)
 
     draw.multiline_text(
@@ -43,4 +46,4 @@ def generate_picture(options: GenerationOptions) -> None:
         fill=text_color,
     )
 
-    image.save(options.output_filename)
+    return image

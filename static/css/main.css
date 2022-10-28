@@ -1,0 +1,11 @@
+.center-text {
+    text-align: center;
+}
+
+header {
+    padding-bottom: 0px !important;
+}
+
+#introduction-text {
+    padding-bottom: var(--spacing);
+}

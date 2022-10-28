@@ -1,17 +1,18 @@
 """Main CLI entrypoint."""
 import sys
+from typing import Optional
 
 import typer
 from loguru import logger
 
 from roboquote import config
-from roboquote.background_picture import (
+from roboquote.background_image import (
     get_random_background_from_unsplash_by_theme,
     get_random_background_search_query,
 )
-from roboquote.entities.generation_options import GenerationOptions
+from roboquote.entities.generate_options import GenerateOptions
 from roboquote.quote_text_generation import get_random_quote
-from roboquote.result_picture import generate_picture
+from roboquote.result_image import generate_image
 
 app = typer.Typer()
 
@@ -20,42 +21,45 @@ app = typer.Typer()
 def generate(
     filename: str,
     blur: bool = typer.Option(True, help="Add a blur on the background."),
-    blur_intensity: int = typer.Option(
-        5, help="If blur is enabled,the blur intensity level."
+    blur_intensity: Optional[int] = typer.Option(
+        None, help="If blur is enabled,the blur intensity level."
     ),
-    background: str = typer.Option(
+    background: Optional[str] = typer.Option(
         default=None,
-        help="If specified, use this string as the search query for the background picture instead of a random one. Works best with simple queries like 'mountain', 'sea' etc.",
+        help="If specified, use this string as the search query for the background image instead of a random one. Works best with simple queries like 'mountain', 'sea' etc.",
     ),
 ) -> None:
-    """Generate a new picture with the given filename."""
+    """Generate a new image with the given filename."""
     # Get a random background category if not specified
     if background is None:
         background = get_random_background_search_query()
 
     # Get background to use
     (
-        background_image,
-        background_image_credits,
+        background_img,
+        background_img_credits,
     ) = get_random_background_from_unsplash_by_theme(background)
 
     # Print credits
     print(
-        f"Background by {background_image_credits.first_name} {background_image_credits.last_name} (@{background_image_credits.username}): {background_image_credits.url}"
+        f"Background by {background_img_credits.first_name} {background_img_credits.last_name} (@{background_img_credits.username}): {background_img_credits.url}"
     )
 
     # Get text to use
     text = get_random_quote(background)
-    generate_picture(
-        GenerationOptions(
+
+    # Generate and save image
+    generated_image = generate_image(
+        GenerateOptions(
             text=text,
-            output_filename=filename,
-            background_image=background_image,
+            background_image=background_img,
             blur=blur,
             blur_intensity=blur_intensity,
         )
     )
-    print(f"Picture saved as {filename}")
+    generated_image.save(filename)
+
+    print(f"Image saved as {filename}")
 
 
 if __name__ == "__main__":

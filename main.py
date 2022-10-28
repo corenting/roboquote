@@ -63,6 +63,4 @@ def generate(
 
 
 if __name__ == "__main__":
-    logger.remove()
-    logger.add(sys.stderr, level=config.LOG_LEVEL)
     app()

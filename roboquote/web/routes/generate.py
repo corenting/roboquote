@@ -19,7 +19,10 @@ from roboquote.result_image import generate_image
 async def generate(request: Request) -> Response:
     """For a given request, generate the corresponding quote image."""
     # Get input parameters
-    if "background" in request.query_params:
+    if (
+        "background" in request.query_params
+        and len(request.query_params["background"]) > 0
+    ):
         background = str(request.query_params["background"])
     else:
         background = get_random_background_search_query()

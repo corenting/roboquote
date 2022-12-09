@@ -1,6 +1,6 @@
 # roboquote
 
-Generate random "inspirational" quotes images by using the [BLOOM language model](https://huggingface.co/bigscience/bloom) through the Hugging Face Inference API.
+Generate random "inspirational" quotes images by using an AI text generation model (currently the [BLOOM language model](https://huggingface.co/bigscience/bloom)) through the Hugging Face Inference API.
 
 ## Examples
 
@@ -27,4 +27,4 @@ See `poetry run python main.py --help` for the available options.
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
 - [BigScience Workshop](https://huggingface.co/bigscience/) for the bloom model used
 - [Hugging Face](https://huggingface.co/) for the inference API
-- [Unsplash](unsplash.com)] for the background images.
+- [Unsplash](unsplash.com) for the background images.

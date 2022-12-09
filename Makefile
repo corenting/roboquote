@@ -1,5 +1,7 @@
-PYTHON=poetry run
-SRC = roboquote main.py
+PYTHON := poetry run
+ROME := npx rome
+SRC := roboquote main.py
+JS_SRC := static/js/
 
 .PHONY: init
 .SILENT: init
@@ -7,19 +9,19 @@ init:
 	poetry install
 
 .PHONY: format
-.SILENT: format
 format:
-	$(PYTHON) black .
-	$(PYTHON) isort .
+	$(PYTHON) black $(SRC)
+	$(PYTHON) ruff --fix $(SRC)
+	$(ROME) format --write $(JS_SRC)
+	$(ROME) check --apply-suggested $(JS_SRC)
 
 .PHONY: style
-.SILENT: style
 style:
 	shellcheck scripts/*.sh
-	$(PYTHON) pflake8 $(SRC)
-	$(PYTHON) mypy -- $(SRC)
 	$(PYTHON) black --check $(SRC)
-	$(PYTHON) isort --check-only $(SRC)
+	$(PYTHON) ruff $(SRC)
+	$(PYTHON) mypy -- $(SRC)
+	$(ROME) check $(JS_SRC)
 
 .PHONY: update-examples
 .SILENT: update-examples

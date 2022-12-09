@@ -8,6 +8,7 @@ import requests
 from loguru import logger
 
 from roboquote import config, constants
+from roboquote.entities.exceptions import CannotGenerateQuoteException
 
 
 def _get_random_prompt(background_search_query: str) -> str:
@@ -70,6 +71,12 @@ def get_random_quote(background_search_query: str) -> str:
         "POST", constants.HUGGING_FACE_API_URL, headers=headers, data=data
     )
     response_content = json.loads(response.content.decode("utf-8"))
+
+    # Error case
+    if not response.ok:
+        raise CannotGenerateQuoteException(
+            response_content.get("error", "Unknown error from Hugging Face.")
+        )
 
     text: str = response_content[0]["generated_text"]
     text = text.replace(prompt, "")

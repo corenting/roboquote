@@ -44,6 +44,7 @@ async def generate(request: Request) -> Response:
         blur_intensity=None,
         text=text,
     )
+
     image = generate_image(generate_options)
     image_as_bytes = BytesIO()
     image.save(image_as_bytes, format="JPEG")

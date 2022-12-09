@@ -1,4 +1,4 @@
-"""Handle the picture-related tasks."""
+"""Handle the image-related tasks."""
 
 from PIL import Image, ImageDraw, ImageFilter
 

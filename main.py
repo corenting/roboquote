@@ -1,11 +1,8 @@
 """Main CLI entrypoint."""
-import sys
 from typing import Optional
 
 import typer
-from loguru import logger
 
-from roboquote import config
 from roboquote.background_image import (
     get_random_background_from_unsplash_by_theme,
     get_random_background_search_query,

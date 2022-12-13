@@ -1,4 +1,4 @@
-"""Functions to get a background for the result picture."""
+"""Functions to get a background for the result image."""
 import random
 
 import requests
@@ -22,7 +22,7 @@ def get_random_background_from_unsplash_by_theme(
     )
 
     if not response.ok:
-        raise CannotFetchBackgroundException("Error fetching background")
+        raise CannotFetchBackgroundException("Error fetching background from Unsplash.")
 
     content = response.json()["photos"]["results"]
     items = [

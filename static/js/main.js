@@ -15,7 +15,7 @@ function setStartLoading() {
 	errorDivElement.style.display = "none";
 }
 
-function setStopLoading(isError) {
+function setStopLoading(isError, errorMsg = "Unknown error 😢") {
 	// Enable submit button
 	const submitButtonElement = document.getElementById("form-submit");
 	submitButtonElement.disabled = false;
@@ -26,37 +26,70 @@ function setStopLoading(isError) {
 
 	// Handle error div
 	const errorDivElement = document.getElementById("error");
+	const errorDetailsElement = document.getElementById("error-details");
 	errorDivElement.style.display = isError ? "block" : "none";
+	errorDetailsElement.innerText = errorMsg;
 
-	if (!isError) {
-		// Show result div
-		const resultDivElement = document.getElementById("result");
-		resultDivElement.style.display = "block";
-	}
+	// Result div
+	const resultDivElement = document.getElementById("result");
+	resultDivElement.style.display = isError ? "none" : "block";
 }
 
-htmx.on("htmx:beforeRequest", function (evt) {
-	const path = evt.detail.requestConfig.path;
-	// We only want to intercept calls to /generate
-	if (path !== "/generate/") {
-		return;
+function onGenerateError(error) {
+	setStopLoading(true, error);
+}
+
+function handleGeneration(background) {
+	setStartLoading();
+
+	// Get HTML elements
+	const pictureResultElement = document.getElementById("result-image");
+
+	// Build URL for image
+	const queryParams = {};
+	if (background) {
+		queryParams["background"] = background;
+	}
+	var url = "/generate/";
+	if (queryParams.length > 0) {
+		const searchParams = new URLSearchParams(queryParams);
+		url += `?${searchParams}`;
 	}
 
+	// Fetch image
+	fetch(url)
+		.then((response) => {
+			if (response.ok) {
+				response.blob().then((myBlob) => {
+					setStopLoading(false);
+					var objectURL = URL.createObjectURL(myBlob);
+					pictureResultElement.src = objectURL;
+				});
+			} else {
+				response.json().then((json) => {
+					onGenerateError(json["error"]);
+				});
+			}
+		})
+		.catch(() => {
+			onGenerateError("Unknown error");
+		});
+}
+
+function onGenerateClick(evt) {
 	evt.preventDefault();
 
-	// Build URL for picture
-	const searchParams = new URLSearchParams(evt.detail.requestConfig.parameters);
-	const url = `${path}?${searchParams}`;
+	// Get parameters
+	const formParameters = Object.fromEntries(new FormData(evt.target));
+	const background = formParameters["background"]
+		? formParameters["background"]
+		: null;
 
-	// Set picture URL
-	setStartLoading();
-	const pictureResultElement = document.getElementById("result-image");
-	pictureResultElement.src = url;
+	try {
+		handleGeneration(background);
+	} catch (error) {
+		console.log("Error during generation", error);
+	}
 
-	pictureResultElement.addEventListener("load", function () {
-		setStopLoading((isError = false));
-	});
-	pictureResultElement.addEventListener("error", function () {
-		setStopLoading((isError = true));
-	});
-});
+	return false;
+}

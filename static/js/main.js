@@ -51,7 +51,7 @@ function handleGeneration(background) {
 		queryParams["background"] = background;
 	}
 	var url = "/generate/";
-	if (queryParams.length > 0) {
+	if (Object.keys(queryParams).length > 0) {
 		const searchParams = new URLSearchParams(queryParams);
 		url += `?${searchParams}`;
 	}

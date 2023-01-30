@@ -52,7 +52,9 @@ async def generate(request: Request) -> Response:
     return Response(
         image_as_bytes.getvalue(),
         media_type="image/jpeg",
-        headers={"X-Image-Credits": json.dumps(asdict(background_image_credits))},
+        headers={
+            "X-Image-Credits": json.dumps(asdict(background_image_credits)),
+        },
     )
 
 

@@ -21,7 +21,7 @@ def generate_image(options: GenerateOptions) -> Image:
         + dominant_bg_g * 0.587
         + dominant_bg_b * 0.114
         + (1 - dominant_bg_a) * 255
-    ) > 186:
+    ) > 150:
         text_color = "#000000"
     else:
         text_color = "#FFFFFF"

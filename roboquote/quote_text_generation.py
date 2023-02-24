@@ -44,18 +44,16 @@ def _cleanup_text(generated_text: str) -> str:
 
     # If the model generated a quoted text, get it directly
     quoted_text = generated_text.strip()
-    regex_quotes_list = r"[\"\“\«]"
-    quoted_text = re.findall(rf"{regex_quotes_list}*([A-Za-z\s]+){regex_quotes_list}*", quoted_text)
-    if len(quoted_text) > 0:
-        logger.debug(f'Cleaned up quote is: "{quoted_text[0]}"')
-        return quoted_text[0]
+    regex_quotes_list = r"\"\“\«\”"
+    regex_results = re.findall(
+        rf"[{regex_quotes_list}]*([^{regex_quotes_list}]+)[{regex_quotes_list}]*",
+        quoted_text,
+    )
+    if len(regex_results) > 0:
+        logger.debug(f'Cleaned up quote is: "{regex_results[0]}"')
+        return regex_results[0]
 
     # Else tokenize the text and get the first sentence
-    try:
-        nltk.data.find("tokenizers/punkt")
-    except LookupError:
-        nltk.download("punkt")
-        print("Missing data downloaded, please relaunch.")
     text = nltk.sent_tokenize(generated_text)[0].strip()
 
     logger.debug(f'Cleaned up quote is: "{text}"')

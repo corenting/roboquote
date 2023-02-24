@@ -44,7 +44,7 @@ function handleGeneration(background) {
 
 	// Get HTML elements
 	const pictureResultElement = document.getElementById("result-image");
-	const captionResultElement = document.getElementById("result-caption")
+	const captionResultElement = document.getElementById("result-caption");
 
 	// Build URL for image
 	const queryParams = {};
@@ -67,9 +67,11 @@ function handleGeneration(background) {
 					pictureResultElement.src = objectURL;
 
 					// Credits
-					const pictureCredits = JSON.parse(response.headers.get("x-image-credits"))
-					console.log(pictureCredits)
-					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.`
+					const pictureCredits = JSON.parse(
+						response.headers.get("x-image-credits"),
+					);
+					console.log(pictureCredits);
+					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.`;
 				});
 			} else {
 				response.json().then((json) => {

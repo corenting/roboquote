@@ -10,7 +10,17 @@ from roboquote.entities.image_credits import ImageCredits
 
 def get_random_background_search_query() -> str:
     """Get a random background theme."""
-    return random.choice(["sea", "sunrise", "mountain", "sand beach"])
+    return random.choice(
+        [
+            "sea",
+            "sunrise",
+            "mountain",
+            "sand beach",
+            "desert",
+            "forest",
+            "calm landscape",
+        ]
+    )
 
 
 def get_random_background_from_unsplash_by_theme(

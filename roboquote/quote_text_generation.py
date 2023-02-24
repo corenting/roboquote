@@ -43,7 +43,9 @@ def _cleanup_text(generated_text: str) -> str:
     logger.debug(f'Cleaning up quote: "{generated_text}"')
 
     # If the model generated a quoted text, get it directly
-    quoted_text = re.findall(r"[\"“«]*(.*)[\"“«]*", generated_text)
+    quoted_text = generated_text.strip()
+    regex_quotes_list = r"[\"\“\«]"
+    quoted_text = re.findall(rf"{regex_quotes_list}*([A-Za-z\s]+){regex_quotes_list}*", quoted_text)
     if len(quoted_text) > 0:
         logger.debug(f'Cleaned up quote is: "{quoted_text[0]}"')
         return quoted_text[0]

@@ -14,9 +14,9 @@ from roboquote.entities.exceptions import CannotGenerateQuoteException
 def _get_random_prompt(background_search_query: str) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a picture of a {background_search_query}, I write an inspirational quote such as:",
-        f"On a inspirational picture of a {background_search_query}, I write an inspirational short quote such as:",
-        f"On a inspirational picture of a {background_search_query}, I write a short quote such as:",
+        f"On a {background_search_query} themed picture, a fitting inspirational quote would be::",
+        f"On a {background_search_query} themed inspirational picture , a fitting inspirational short quote would be:",
+        f"On a {background_search_query} themed inspirational picture, a fitting short quote would be:",
     ]
 
     prompt = random.choice(prompts)
@@ -62,17 +62,25 @@ def _cleanup_text(generated_text: str) -> str:
 
 def get_random_quote(background_search_query: str) -> str:
     """For a given background category, get a random quote."""
-    headers = {"Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}"}
     prompt = _get_random_prompt(background_search_query)
     logger.debug(f'Prompt for model: "{prompt}"')
-    data = json.dumps(prompt)
+
+    headers = {
+        "Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}",
+        "Content-Type": "application/json",
+    }
+    data = json.dumps({"inputs": prompt, "use_cache": False})
 
     response = requests.request(
         "POST", constants.HUGGING_FACE_API_URL, headers=headers, data=data
     )
-    response_content = json.loads(response.content.decode("utf-8"))
 
-    # Error case
+    try:
+        response_content = json.loads(response.content.decode("utf-8"))
+    except json.JSONDecodeError:
+        raise CannotGenerateQuoteException("Unknown error from Hugging Face.")
+
+    # Error case with error message
     if not response.ok:
         raise CannotGenerateQuoteException(
             response_content.get("error", "Unknown error from Hugging Face.")

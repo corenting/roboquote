@@ -51,7 +51,7 @@ function handleGeneration(background) {
 	if (background) {
 		queryParams["background"] = background;
 	}
-	var url = "/generate/";
+	let url = "/generate/";
 	if (Object.keys(queryParams).length > 0) {
 		const searchParams = new URLSearchParams(queryParams);
 		url += `?${searchParams}`;
@@ -63,7 +63,7 @@ function handleGeneration(background) {
 			if (response.ok) {
 				response.blob().then((myBlob) => {
 					setStopLoading(false);
-					var objectURL = URL.createObjectURL(myBlob);
+					const objectURL = URL.createObjectURL(myBlob);
 					pictureResultElement.src = objectURL;
 
 					// Credits

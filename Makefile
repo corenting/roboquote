@@ -1,5 +1,5 @@
 PYTHON := poetry run
-ROME := npx rome
+ROME := npx rome@latest
 SRC := roboquote main.py
 JS_SRC := static/js/
 
@@ -13,7 +13,7 @@ format:
 	$(PYTHON) black $(SRC)
 	$(PYTHON) ruff --fix $(SRC)
 	$(ROME) format --write $(JS_SRC)
-	$(ROME) check --apply-suggested $(JS_SRC)
+	$(ROME) check --apply $(JS_SRC)
 
 .PHONY: style
 style:

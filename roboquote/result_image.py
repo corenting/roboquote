@@ -6,6 +6,7 @@ from roboquote.entities.generate_options import GenerateOptions
 from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_image
 from loguru import logger
 
+
 def generate_image(options: GenerateOptions) -> Image:
     """Generate and return an image with the given filename for a given text and category."""
     image = options.background_image.copy()
@@ -37,7 +38,7 @@ def generate_image(options: GenerateOptions) -> Image:
         font=font,
         fill=text_color,
         stroke_width=2,
-        stroke_fill="#000000" if text_color == "#FFFFFF" else "#FFFFFF"
+        stroke_fill="#000000" if text_color == "#FFFFFF" else "#FFFFFF",
     )
 
     return image

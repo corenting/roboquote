@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 from roboquote.entities.generate_options import GenerateOptions
 from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_image
-
+from loguru import logger
 
 def generate_image(options: GenerateOptions) -> Image:
     """Generate and return an image with the given filename for a given text and category."""
@@ -15,7 +15,8 @@ def generate_image(options: GenerateOptions) -> Image:
     # Get dominant background color
     dominant_bg_r, dominant_bg_g, dominant_bg_b, _ = get_dominant_color(image)
     luma = dominant_bg_r * 0.299 + dominant_bg_g * 0.587 + dominant_bg_b * 0.114
-    text_color = "#000000" if luma > 150 else "#FFFFFF"
+    logger.debug(f"Background luma: {luma}")
+    text_color = "#000000" if luma > 200 else "#FFFFFF"
 
     if options.blur:
         blur_intensity = (
@@ -35,6 +36,8 @@ def generate_image(options: GenerateOptions) -> Image:
         align="center",
         font=font,
         fill=text_color,
+        stroke_width=2,
+        stroke_fill="#000000" if text_color == "#FFFFFF" else "#FFFFFF"
     )
 
     return image

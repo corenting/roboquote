@@ -28,18 +28,14 @@ def get_random_background_from_unsplash_by_theme(
 ) -> tuple[Image, ImageCredits]:
     """Get a random background given a search query."""
     response = requests.get(
-        f"https://unsplash.com/napi/search?query={background_search_query} background"
+        f"https://unsplash.com/napi/search?query={background_search_query} background&orientation=landscape"
     )
 
     if not response.ok:
         raise CannotFetchBackgroundException("Error fetching background from Unsplash.")
 
     content = response.json()["photos"]["results"]
-    items = [
-        item
-        for item in content
-        if not item["premium"] and item["width"] > item["height"]
-    ]
+    items = [item for item in content if not item["premium"]]
 
     random_background = random.choice(items)
     picture_url = random_background["urls"]["full"]

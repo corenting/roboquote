@@ -13,18 +13,9 @@ def generate_image(options: GenerateOptions) -> Image:
     height = image.height
 
     # Get dominant background color
-    dominant_bg_r, dominant_bg_g, dominant_bg_b, dominant_bg_a = get_dominant_color(
-        image
-    )
-    if (
-        dominant_bg_r * 0.299
-        + dominant_bg_g * 0.587
-        + dominant_bg_b * 0.114
-        + (1 - dominant_bg_a) * 255
-    ) > 150:
-        text_color = "#000000"
-    else:
-        text_color = "#FFFFFF"
+    dominant_bg_r, dominant_bg_g, dominant_bg_b, _ = get_dominant_color(image)
+    luma = dominant_bg_r * 0.299 + dominant_bg_g * 0.587 + dominant_bg_b * 0.114
+    text_color = "#000000" if luma > 150 else "#FFFFFF"
 
     if options.blur:
         blur_intensity = (

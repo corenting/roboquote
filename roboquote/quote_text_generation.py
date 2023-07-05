@@ -14,20 +14,16 @@ from roboquote.entities.exceptions import CannotGenerateQuoteException
 def _get_random_prompt(background_search_query: str) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a {background_search_query} themed picture, a fitting inspirational quote would be::",
-        f"On a {background_search_query} themed inspirational picture , a fitting inspirational short quote would be:",
-        f"On a {background_search_query} themed inspirational picture, a fitting short quote would be:",
+        f"On a {background_search_query} themed picture, there was a fitting inspirational quote: ",
+        f"On a {background_search_query} themed inspirational picture, there was a fitting inspirational short quote: ",
+        f"On a {background_search_query} themed inspirational picture, there was a fitting short quote: ",
     ]
 
     prompt = random.choice(prompts)
 
-    # Randomly replace picture with photography
+    # Randomly replace "picture" with "photography"
     if random.randint(0, 1) == 0:
         prompt = prompt.replace("picture", "photography")
-
-    # Randomly replace such as with like
-    if random.randint(0, 1) == 0:
-        prompt = prompt.replace("such as", "like")
 
     # Add random amount of space in the end
     prompt = prompt + (" " * random.randint(0, 1))
@@ -69,7 +65,15 @@ def get_random_quote(background_search_query: str) -> str:
         "Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}",
         "Content-Type": "application/json",
     }
-    data = json.dumps({"inputs": prompt, "use_cache": False})
+    data = json.dumps(
+        {
+            "inputs": prompt,
+            "parameters": {"max_new_tokens": 30},
+            "options": {
+                "use_cache": False,
+            },
+        }
+    )
 
     response = requests.request(
         "POST", constants.HUGGING_FACE_API_URL, headers=headers, data=data

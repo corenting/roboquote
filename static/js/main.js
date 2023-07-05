@@ -89,9 +89,7 @@ function onGenerateClick(evt) {
 
 	// Get parameters
 	const formParameters = Object.fromEntries(new FormData(evt.target));
-	const background = formParameters["background"]
-		? formParameters["background"]
-		: null;
+	const background = formParameters["background"] || null;
 
 	try {
 		handleGeneration(background);

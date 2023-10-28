@@ -8,6 +8,7 @@ from roboquote.background_image import (
     get_random_background_search_query,
 )
 from roboquote.entities.generate_options import GenerateOptions
+from roboquote.entities.text_model import TextModel
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
 
@@ -27,6 +28,7 @@ def generate(
         + "for the background image instead of a random one. "
         + "Works best with simple queries like 'mountain', 'sea' etc.",
     ),
+    text_model: TextModel = TextModel.BLOOM,
 ) -> None:
     """Generate a new image with the given filename."""
     # Get a random background category if not specified

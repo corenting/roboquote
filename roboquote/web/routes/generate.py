@@ -12,6 +12,7 @@ from roboquote.background_image import (
     get_random_background_search_query,
 )
 from roboquote.entities.generate_options import GenerateOptions
+from roboquote.entities.text_model import TextModel
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
 
@@ -35,7 +36,7 @@ async def generate(request: Request) -> Response:
     ) = get_random_background_from_unsplash_by_theme(background)
 
     # Get text to use
-    text = get_random_quote(background)
+    text = get_random_quote(background, TextModel.BLOOM)
 
     # Generate image
     generate_options = GenerateOptions(

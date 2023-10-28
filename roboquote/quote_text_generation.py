@@ -11,25 +11,42 @@ from roboquote.entities.exceptions import CannotGenerateQuoteError
 from roboquote.entities.text_model import TextModel
 
 
-def _get_random_prompt(background_search_query: str) -> str:
-    """Get a random prompt for the model."""
-    prompts = [
-        f"On a {background_search_query} themed picture, "
-        + "there was a fitting inspirational quote: ",
-        f"On a {background_search_query} themed inspirational picture, "
-        + "there was a fitting inspirational short quote: ",
-        f"On a {background_search_query} themed inspirational picture, "
-        + "there was a fitting short quote: ",
-    ]
+def _get_base_prompt_by_model(
+    background_search_query: str, text_model: TextModel
+) -> str:
+    """Get base prompt by model"""
+    if text_model == TextModel.BLOOM:
+        prompts = [
+            f"On a {background_search_query} themed picture, "
+            + "there was a fitting inspirational quote: ",
+            f"On a {background_search_query} themed inspirational picture, "
+            + "there was a fitting inspirational short quote: ",
+            f"On a {background_search_query} themed inspirational picture, "
+            + "there was a fitting short quote: ",
+        ]
+    elif text_model == TextModel.MISTRAL_7B_INSTRUCT:
+        prompts = [
+            "<s>[INST] Give me a inspirational quote "
+            + f"that fits a {background_search_query} themed picture, "
+            + "similar to old Tumblr pictures. Give me the quote text "
+            + "without any surrounding text. Do not return lists. "
+            + "The quote must be in english. "
+            + "The quote must exactly one sentence.[/INST]"
+        ]
+    else:
+        raise ValueError("model not supported")
 
-    prompt = random.choice(prompts)
+    return random.choice(prompts)
+
+
+def _get_random_prompt(background_search_query: str, text_model: TextModel) -> str:
+    """Get a random prompt for the model."""
+
+    prompt = _get_base_prompt_by_model(background_search_query, text_model)
 
     # Randomly replace "picture" with "photography"
     if random.randint(0, 1) == 0:
         prompt = prompt.replace("picture", "photography")
-
-    # Add random amount of space in the end
-    prompt = prompt + (" " * random.randint(0, 1))
 
     return prompt
 
@@ -41,23 +58,29 @@ def _cleanup_text(generated_text: str) -> str:
     """
     logger.debug(f'Cleaning up quote: "{generated_text}"')
 
-    # If the model generated a quoted text, get it directly
-    quoted_text = generated_text.strip()
+    cleaned_quote = generated_text.strip()
+
+    # If the model generated a quoted text, get text inside quote
+    # Get the longest string in case we match some smaller fragments
+    # of text.
     regex_quotes_list = r"\"\“\«\”"
     regex_results = re.findall(
         rf"[{regex_quotes_list}]*([^{regex_quotes_list}]+)[{regex_quotes_list}]*",
-        quoted_text,
+        cleaned_quote,
     )
     if len(regex_results) > 0:
-        logger.debug(f'Cleaned up quote is: "{regex_results[0]}"')
-        return regex_results[0]
+        cleaned_quote = max(regex_results, key=len)
 
-    return generated_text
+    # Remove other lines if multiple lines
+    cleaned_quote = cleaned_quote.partition("\n")[0]
+
+    logger.debug(f"Cleaned quote: {cleaned_quote}")
+    return cleaned_quote
 
 
 def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
     """For a given background category, get a random quote."""
-    prompt = _get_random_prompt(background_search_query)
+    prompt = _get_random_prompt(background_search_query, text_model)
     logger.debug(f'Prompt for model: "{prompt}"')
 
     headers = {
@@ -68,7 +91,7 @@ def get_random_quote(background_search_query: str, text_model: TextModel) -> str
         {
             "inputs": prompt,
             "parameters": {
-                "max_new_tokens": 30,
+                "max_new_tokens": 50,
                 "do_sample": True,
             },
             "options": {

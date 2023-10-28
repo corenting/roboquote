@@ -9,3 +9,28 @@ header {
 #introduction-text {
     padding-bottom: var(--spacing);
 }
+
+#loading {
+    width: 100%;
+    text-align: center;
+}
+
+#loading-emoji {
+    font-size: 124px;
+    display: inline-block;
+    animation: spin 1s infinite linear;
+}
+
+#loading-bar {
+    width: 30%;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+
+    from {
+        transform: rotate(0deg)
+    }
+}

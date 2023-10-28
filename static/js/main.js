@@ -39,18 +39,26 @@ function onGenerateError(error) {
 	setStopLoading(true, error);
 }
 
-function handleGeneration(background) {
+function handleGeneration(background, text_model, blur) {
 	setStartLoading();
 
 	// Get HTML elements
 	const pictureResultElement = document.getElementById("result-image");
 	const captionResultElement = document.getElementById("result-caption");
 
-	// Build URL for image
+	// Build query params
 	const queryParams = {};
 	if (background) {
 		queryParams["background"] = background;
 	}
+	if (text_model) {
+		queryParams["text_model"] = text_model;
+	}
+	if (blur) {
+		queryParams["blur"] = blur;
+	}
+
+	// Build URL
 	let url = "/generate/";
 	if (Object.keys(queryParams).length > 0) {
 		const searchParams = new URLSearchParams(queryParams);
@@ -66,17 +74,29 @@ function handleGeneration(background) {
 					const objectURL = URL.createObjectURL(myBlob);
 					pictureResultElement.src = objectURL;
 
-					// Credits
+					// Picture credits
 					const pictureCredits = JSON.parse(
 						response.headers.get("x-image-credits"),
 					);
-					console.log(pictureCredits);
-					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.`;
+
+					// Generation information
+					const generationInfo = JSON.parse(
+						response.headers.get("x-generation-parameters"),
+					);
+
+					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.<br />
+					Generated with ${generationInfo.text_model} on Hugging Face.
+					`;
 				});
 			} else {
-				response.json().then((json) => {
-					onGenerateError(json["error"]);
-				});
+				response
+					.json()
+					.then((json) => {
+						onGenerateError(json["error"]);
+					})
+					.catch((_) => {
+						onGenerateError("Unknown error");
+					});
 			}
 		})
 		.catch(() => {
@@ -89,10 +109,12 @@ function onGenerateClick(evt) {
 
 	// Get parameters
 	const formParameters = Object.fromEntries(new FormData(evt.target));
-	const background = formParameters["background"] || null;
+	const background = formParameters["background"];
+	const textModel = formParameters["text_model"];
+	const blur = formParameters["blur"];
 
 	try {
-		handleGeneration(background);
+		handleGeneration(background, textModel, blur);
 	} catch (error) {
 		console.log("Error during generation", error);
 	}

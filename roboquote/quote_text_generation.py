@@ -8,6 +8,7 @@ from loguru import logger
 
 from roboquote import config, constants
 from roboquote.entities.exceptions import CannotGenerateQuoteError
+from roboquote.entities.text_model import TextModel
 
 
 def _get_random_prompt(background_search_query: str) -> str:
@@ -54,7 +55,7 @@ def _cleanup_text(generated_text: str) -> str:
     return generated_text
 
 
-def get_random_quote(background_search_query: str) -> str:
+def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
     """For a given background category, get a random quote."""
     prompt = _get_random_prompt(background_search_query)
     logger.debug(f'Prompt for model: "{prompt}"')
@@ -77,7 +78,10 @@ def get_random_quote(background_search_query: str) -> str:
     )
 
     response = requests.request(
-        "POST", constants.HUGGING_FACE_API_URL, headers=headers, data=data
+        "POST",
+        constants.HUGGING_FACE_BASE_API_URL + text_model.value,
+        headers=headers,
+        data=data,
     )
 
     try:

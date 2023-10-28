@@ -28,7 +28,10 @@ def generate(
         + "for the background image instead of a random one. "
         + "Works best with simple queries like 'mountain', 'sea' etc.",
     ),
-    text_model: TextModel = TextModel.BLOOM,
+    text_model: TextModel = typer.Option(
+        default=TextModel.MISTRAL_7B_INSTRUCT.value,
+        help="The text generation model to use.",
+    ),
 ) -> None:
     """Generate a new image with the given filename."""
     # Get a random background category if not specified

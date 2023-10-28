@@ -3,20 +3,22 @@ import json
 import random
 import re
 
-import nltk
 import requests
 from loguru import logger
 
 from roboquote import config, constants
-from roboquote.entities.exceptions import CannotGenerateQuoteException
+from roboquote.entities.exceptions import CannotGenerateQuoteError
 
 
 def _get_random_prompt(background_search_query: str) -> str:
     """Get a random prompt for the model."""
     prompts = [
-        f"On a {background_search_query} themed picture, there was a fitting inspirational quote: ",
-        f"On a {background_search_query} themed inspirational picture, there was a fitting inspirational short quote: ",
-        f"On a {background_search_query} themed inspirational picture, there was a fitting short quote: ",
+        f"On a {background_search_query} themed picture, "
+        + "there was a fitting inspirational quote: ",
+        f"On a {background_search_query} themed inspirational picture, "
+        + "there was a fitting inspirational short quote: ",
+        f"On a {background_search_query} themed inspirational picture, "
+        + "there was a fitting short quote: ",
     ]
 
     prompt = random.choice(prompts)
@@ -49,11 +51,7 @@ def _cleanup_text(generated_text: str) -> str:
         logger.debug(f'Cleaned up quote is: "{regex_results[0]}"')
         return regex_results[0]
 
-    # Else tokenize the text and get the first sentence
-    text = nltk.sent_tokenize(generated_text)[0].strip()
-
-    logger.debug(f'Cleaned up quote is: "{text}"')
-    return text
+    return generated_text
 
 
 def get_random_quote(background_search_query: str) -> str:
@@ -68,7 +66,10 @@ def get_random_quote(background_search_query: str) -> str:
     data = json.dumps(
         {
             "inputs": prompt,
-            "parameters": {"max_new_tokens": 30},
+            "parameters": {
+                "max_new_tokens": 30,
+                "do_sample": True,
+            },
             "options": {
                 "use_cache": False,
             },
@@ -81,12 +82,12 @@ def get_random_quote(background_search_query: str) -> str:
 
     try:
         response_content = json.loads(response.content.decode("utf-8"))
-    except json.JSONDecodeError:
-        raise CannotGenerateQuoteException("Unknown error from Hugging Face.")
+    except json.JSONDecodeError as e:
+        raise CannotGenerateQuoteError() from e
 
     # Error case with error message
     if not response.ok:
-        raise CannotGenerateQuoteException(
+        raise CannotGenerateQuoteError(
             response_content.get("error", "Unknown error from Hugging Face.")
         )
 

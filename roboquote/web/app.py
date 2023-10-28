@@ -1,11 +1,12 @@
 """Declare and configure the starlette app."""
 
 from typing import Any
+
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
+from starlette.responses import JSONResponse, Response
 from starlette.routing import Mount
 from starlette.staticfiles import StaticFiles
-from starlette.exceptions import HTTPException
-from starlette.responses import Response, JSONResponse
 
 from roboquote import config
 from roboquote.web.routes import generate, health, index

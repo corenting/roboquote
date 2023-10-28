@@ -10,7 +10,7 @@ init:
 
 .PHONY: format
 format:
-	$(PYTHON) black $(SRC)
+	$(PYTHON) ruff format $(SRC)
 	$(PYTHON) ruff --fix $(SRC)
 	$(ROME) format --write $(JS_SRC)
 	$(ROME) check --apply $(JS_SRC)
@@ -18,7 +18,7 @@ format:
 .PHONY: style
 style:
 	shellcheck scripts/*.sh
-	$(PYTHON) black --check $(SRC)
+	$(PYTHON) ruff format --check $(SRC)
 	$(PYTHON) ruff $(SRC)
 	$(PYTHON) mypy -- $(SRC)
 	$(ROME) check $(JS_SRC)

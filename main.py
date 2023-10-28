@@ -23,7 +23,9 @@ def generate(
     ),
     background: Optional[str] = typer.Option(
         default=None,
-        help="If specified, use this string as the search query for the background image instead of a random one. Works best with simple queries like 'mountain', 'sea' etc.",
+        help="If specified, use this string as the search query "
+        + "for the background image instead of a random one. "
+        + "Works best with simple queries like 'mountain', 'sea' etc.",
     ),
 ) -> None:
     """Generate a new image with the given filename."""
@@ -39,7 +41,11 @@ def generate(
 
     # Print credits
     print(
-        f"Background by {background_img_credits.first_name} {background_img_credits.last_name} (@{background_img_credits.username}): {background_img_credits.url}"
+        "Background by "
+        + background_img_credits.first_name
+        + " "
+        + background_img_credits.last_name
+        + f" (@{background_img_credits.username}): {background_img_credits.url}"
     )
 
     # Get text to use

@@ -1,7 +1,8 @@
 """Handle the multiline text wrapping for Pillow operations.
 
-From https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py by atomicparade (https://github.com/atomicparade) for the text wrapping
-From https://stackoverflow.com/a/61730849 for the dominant color function
+- From https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py
+by atomicparade (https://github.com/atomicparade) for the text wrapping
+- From https://stackoverflow.com/a/61730849 for the dominant color function
 """
 import os
 import random

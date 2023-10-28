@@ -51,7 +51,7 @@ def generate(
     )
 
     # Get text to use
-    text = get_random_quote(background)
+    text = get_random_quote(background, text_model)
 
     # Generate and save image
     generated_image = generate_image(

@@ -5,18 +5,27 @@
         <summary>Tweak the parameters</summary>
 
         <label for="background">
-            Background theme (optional, will be random if not provided)
+            Background theme (optional, will be random if not provided or empty)
             <input type="text" id="background" name="background"
                 placeholder="Try simple terms like &quot;beach&quot;, &quot;sunrise&quot;, &quot;sea&quot;...">
         </label>
 
-        <!--  <details>
-            <summary>Advanced options</summary>
-            <label for="blur">
-                <input type="checkbox" id="blur" name="blur">
-                Enable background blurring
-            </label>
-        </details> -->
+        <label for="text_model">
+            Text generation model
+            <select id="text_model" name="text_model">
+            <option value="{{ global.default_text_model_name_for_web_ui }}">{{ global.default_text_model_name_for_web_ui }}</option>
+            {% for text_model in global.available_text_models_names %}
+            {% if text_model != global.default_text_model_name_for_web_ui %}
+            <option value="{{ text_model }}">{{ text_model }}</option>
+            {% endif %}
+            {% endfor %}
+            </select>
+        </label>
+
+        <label for="blur">
+            <input type="checkbox" id="blur" name="blur" checked>
+            Enable background blurring
+        </label>
     </details>
 
 </form>

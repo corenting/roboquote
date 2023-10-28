@@ -19,15 +19,14 @@ from roboquote.result_image import generate_image
 
 async def generate(request: Request) -> Response:
     """For a given request, generate the corresponding quote image."""
-    # Get input parameters
-    if (
-        "background" in request.query_params
-        and len(request.query_params["background"]) > 0
-    ):
+
+    # Get request parameters
+    if len(request.query_params.get("background", "")) > 0:
         background = str(request.query_params["background"])
     else:
         background = get_random_background_search_query()
-    blur: bool = True
+    text_model = TextModel(str(request.query_params["text_model"]))
+    blur: bool = True if request.query_params.get("blur", "on") == "on" else False
 
     # Get background image
     (
@@ -36,7 +35,7 @@ async def generate(request: Request) -> Response:
     ) = get_random_background_from_unsplash_by_theme(background)
 
     # Get text to use
-    text = get_random_quote(background, TextModel.BLOOM)
+    text = get_random_quote(background, text_model)
 
     # Generate image
     generate_options = GenerateOptions(
@@ -55,6 +54,13 @@ async def generate(request: Request) -> Response:
         media_type="image/jpeg",
         headers={
             "X-Image-Credits": json.dumps(asdict(background_image_credits)),
+            "X-Generation-Parameters": json.dumps(
+                {
+                    "background": background,
+                    "blur": blur,
+                    "text_model": text_model.value,
+                }
+            ),
         },
     )
 

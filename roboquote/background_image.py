@@ -24,15 +24,16 @@ def get_random_background_search_query() -> str:
     )
 
 
-def get_random_background_from_unsplash_by_theme(
+async def get_random_background_from_unsplash_by_theme(
     background_search_query: str,
 ) -> tuple[Image, ImageCredits]:
     """Get a random background given a search query."""
-    response = httpx.get(
-        "https://unsplash.com/napi/search/photos?query="
-        + background_search_query
-        + " background&orientation=landscape"
-    )
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://unsplash.com/napi/search/photos?query="
+            + background_search_query
+            + " background&orientation=landscape"
+        )
 
     if not response.is_success:
         raise CannotFetchBackgroundError()
@@ -43,7 +44,8 @@ def get_random_background_from_unsplash_by_theme(
     random_background = random.choice(items)
     picture_url = random_background["urls"]["full"]
 
-    image_response = httpx.get(picture_url)
+    async with httpx.AsyncClient() as client:
+        image_response = await client.get(picture_url)
     image = Image.open(BytesIO(image_response.content))
     credits = ImageCredits(
         username=random_background["user"]["username"],

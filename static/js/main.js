@@ -49,13 +49,13 @@ function handleGeneration(background, text_model, blur) {
 	// Build query params
 	const queryParams = {};
 	if (background) {
-		queryParams["background"] = background;
+		queryParams.background = background;
 	}
 	if (text_model) {
-		queryParams["text_model"] = text_model;
+		queryParams.text_model = text_model;
 	}
 	if (blur) {
-		queryParams["blur"] = blur;
+		queryParams.blur = blur;
 	}
 
 	// Build URL
@@ -92,7 +92,7 @@ function handleGeneration(background, text_model, blur) {
 				response
 					.json()
 					.then((json) => {
-						onGenerateError(json["error"]);
+						onGenerateError(json.error);
 					})
 					.catch((_) => {
 						onGenerateError("Unknown error");
@@ -109,9 +109,9 @@ function onGenerateClick(evt) {
 
 	// Get parameters
 	const formParameters = Object.fromEntries(new FormData(evt.target));
-	const background = formParameters["background"];
-	const textModel = formParameters["text_model"];
-	const blur = formParameters["blur"];
+	const background = formParameters.background;
+	const textModel = formParameters.text_model;
+	const blur = formParameters.blur;
 
 	try {
 		handleGeneration(background, textModel, blur);

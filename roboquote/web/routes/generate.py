@@ -32,10 +32,10 @@ async def generate(request: Request) -> Response:
     (
         background_image,
         background_image_credits,
-    ) = get_random_background_from_unsplash_by_theme(background)
+    ) = await get_random_background_from_unsplash_by_theme(background)
 
     # Get text to use
-    text = get_random_quote(background, text_model)
+    text = await get_random_quote(background, text_model)
 
     # Generate image
     generate_options = GenerateOptions(

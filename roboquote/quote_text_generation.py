@@ -78,7 +78,7 @@ def _cleanup_text(generated_text: str) -> str:
     return cleaned_quote
 
 
-def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
+async def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
     """For a given background category, get a random quote."""
     prompt = _get_random_prompt(background_search_query, text_model)
     logger.debug(f'Prompt for model: "{prompt}"')
@@ -98,11 +98,12 @@ def get_random_quote(background_search_query: str, text_model: TextModel) -> str
         },
     }
 
-    response = httpx.post(
-        constants.HUGGING_FACE_BASE_API_URL + text_model.value,
-        headers=headers,
-        json=data,
-    )
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            constants.HUGGING_FACE_BASE_API_URL + text_model.value,
+            headers=headers,
+            json=data,
+        )
 
     try:
         response_content = json.loads(response.content.decode("utf-8"))

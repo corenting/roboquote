@@ -1,4 +1,5 @@
 """Main CLI entrypoint."""
+import asyncio
 from typing import Optional
 
 import typer
@@ -42,7 +43,7 @@ def generate(
     (
         background_img,
         background_img_credits,
-    ) = get_random_background_from_unsplash_by_theme(background)
+    ) = asyncio.run(get_random_background_from_unsplash_by_theme(background))
 
     # Print credits
     print(
@@ -54,7 +55,7 @@ def generate(
     )
 
     # Get text to use
-    text = get_random_quote(background, text_model)
+    text = asyncio.run(get_random_quote(background, text_model))
 
     # Generate and save image
     generated_image = generate_image(

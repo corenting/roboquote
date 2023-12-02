@@ -3,7 +3,7 @@ import json
 import random
 import re
 
-import requests
+import httpx
 from loguru import logger
 
 from roboquote import config, constants
@@ -87,24 +87,21 @@ def get_random_quote(background_search_query: str, text_model: TextModel) -> str
         "Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}",
         "Content-Type": "application/json",
     }
-    data = json.dumps(
-        {
-            "inputs": prompt,
-            "parameters": {
-                "max_new_tokens": 50,
-                "do_sample": True,
-            },
-            "options": {
-                "use_cache": False,
-            },
-        }
-    )
+    data = {
+        "inputs": prompt,
+        "parameters": {
+            "max_new_tokens": 50,
+            "do_sample": True,
+        },
+        "options": {
+            "use_cache": False,
+        },
+    }
 
-    response = requests.request(
-        "POST",
+    response = httpx.post(
         constants.HUGGING_FACE_BASE_API_URL + text_model.value,
         headers=headers,
-        data=data,
+        json=data,
     )
 
     try:
@@ -113,7 +110,7 @@ def get_random_quote(background_search_query: str, text_model: TextModel) -> str
         raise CannotGenerateQuoteError() from e
 
     # Error case with error message
-    if not response.ok:
+    if not response.is_success:
         raise CannotGenerateQuoteError(
             response_content.get("error", "Unknown error from Hugging Face.")
         )

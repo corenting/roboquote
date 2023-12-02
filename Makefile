@@ -1,5 +1,5 @@
 PYTHON := poetry run
-ROME := npx rome@latest
+BIOME := npx @biomejs/biome@latest
 SRC := roboquote main.py
 JS_SRC := static/js/
 
@@ -12,8 +12,8 @@ init:
 format:
 	$(PYTHON) ruff format $(SRC)
 	$(PYTHON) ruff --fix $(SRC)
-	$(ROME) format --write $(JS_SRC)
-	$(ROME) check --apply $(JS_SRC)
+	$(BIOME) format --write $(JS_SRC)
+	$(BIOME) check --apply $(JS_SRC)
 
 .PHONY: style
 style:
@@ -21,7 +21,7 @@ style:
 	$(PYTHON) ruff format --check $(SRC)
 	$(PYTHON) ruff $(SRC)
 	$(PYTHON) mypy -- $(SRC)
-	$(ROME) check $(JS_SRC)
+	$(BIOME) lint  $(JS_SRC)
 
 .PHONY: update-examples
 .SILENT: update-examples

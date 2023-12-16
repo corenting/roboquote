@@ -24,6 +24,7 @@ mypy = "*"
 ruff = "*"
 
 [tool.ruff]
+target-version = "py312"
 # Enable pycodestyle (E), Pyflakes (F), ruff rules (RUF),
 # flake8-comprehensions (C4), flake8-datetimez (DTZ), isort (I), pep8-naming (N)
 # pyupgrade (UP), flake8-async (ASYNC), flake8-bandit (S), perflint (PERF),

@@ -1,6 +1,5 @@
 """Main CLI entrypoint."""
 import asyncio
-from typing import Optional
 
 import typer
 
@@ -20,10 +19,10 @@ app = typer.Typer()
 def generate(
     filename: str,
     blur: bool = typer.Option(True, help="Add a blur on the background."),
-    blur_intensity: Optional[int] = typer.Option(
+    blur_intensity: int | None = typer.Option(
         None, help="If blur is enabled,the blur intensity level."
     ),
-    background: Optional[str] = typer.Option(
+    background: str | None = typer.Option(
         default=None,
         help="If specified, use this string as the search query "
         + "for the background image instead of a random one. "

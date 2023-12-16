@@ -6,7 +6,6 @@ by atomicparade (https://github.com/atomicparade) for the text wrapping
 """
 import os
 import random
-from typing import Optional, Tuple
 
 from loguru import logger
 from PIL import Image
@@ -97,7 +96,7 @@ def try_fit_text(
     max_height: int,
     spacing: int = 4,
     direction: str = "ltr",
-) -> Optional[str]:
+) -> str | None:
     """Try to to wrap the text into a rectangle.
 
     Tries to fit the text into a box using the given font at decreasing sizes,
@@ -176,7 +175,7 @@ def fit_text(
     scale_factor: float = 0.8,
     max_iterations: int = 5,
     direction: str = "ltr",
-) -> Tuple[FreeTypeFont, str]:
+) -> tuple[FreeTypeFont, str]:
     """Automatically determines text wrapping and appropriate font size.
 
     Tries to fit the text into a box using the given font at decreasing sizes,

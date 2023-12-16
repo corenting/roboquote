@@ -4,7 +4,7 @@ Generate random "inspirational" quotes images by using an AI text generation mod
 
 The following models can be used:
 - [bigscience/bloom](https://huggingface.co/bigscience/bloom)
-- [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1)
+- [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1)
 
 ## Examples
 

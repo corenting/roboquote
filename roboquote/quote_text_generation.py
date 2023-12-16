@@ -24,9 +24,9 @@ def _get_base_prompt_by_model(
             f"On a {background_search_query} themed inspirational picture, "
             + "there was a fitting short quote: ",
         ]
-    elif text_model == TextModel.MISTRAL_7B_INSTRUCT:
+    elif text_model == TextModel.MISTRAL_8X7B_INSTRUCT:
         prompts = [
-            "<s>[INST] Give me a inspirational quote "
+            "[INST] Give me a inspirational quote "
             + f"that fits a {background_search_query} themed picture, "
             + "similar to old Tumblr pictures. Give me the quote text "
             + "without any surrounding text. Do not return lists. "
@@ -81,7 +81,7 @@ def _cleanup_text(generated_text: str) -> str:
 async def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
     """For a given background category, get a random quote."""
     prompt = _get_random_prompt(background_search_query, text_model)
-    logger.debug(f'Prompt for model: "{prompt}"')
+    logger.debug(f'Prompt for {text_model.value}: "{prompt}"')
 
     headers = {
         "Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}",
@@ -107,6 +107,7 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
 
     try:
         response_content = json.loads(response.content.decode("utf-8"))
+        logger.debug(f'Hugging Face response {response.status_code}: {response_content}')
     except json.JSONDecodeError as e:
         raise CannotGenerateQuoteError() from e
 

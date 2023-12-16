@@ -29,7 +29,7 @@ def generate(
         + "Works best with simple queries like 'mountain', 'sea' etc.",
     ),
     text_model: TextModel = typer.Option(
-        default=TextModel.MISTRAL_7B_INSTRUCT.value,
+        default=TextModel.MISTRAL_8X7B_INSTRUCT.value,
         help="The text generation model to use.",
     ),
 ) -> None:

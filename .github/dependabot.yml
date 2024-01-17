@@ -4,6 +4,8 @@ updates:
   directory: "/"
   schedule:
     interval: "weekly"
+  commit-message:
+      prefix: "chore"
   groups:
     production-dependencies:
       dependency-type: "production"
@@ -13,6 +15,8 @@ updates:
   directory: "/"
   schedule:
     interval: "weekly"
+  commit-message:
+      prefix: "chore"
   groups:
     production-dependencies:
       dependency-type: "production"

@@ -107,7 +107,9 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
 
     try:
         response_content = json.loads(response.content.decode("utf-8"))
-        logger.debug(f'Hugging Face response {response.status_code}: {response_content}')
+        logger.debug(
+            f"Hugging Face response {response.status_code}: {response_content}"
+        )
     except json.JSONDecodeError as e:
         raise CannotGenerateQuoteError() from e
 

@@ -602,13 +602,13 @@ files = [
 
 [[package]]
 name = "starlette"
-version = "0.36.0"
+version = "0.36.1"
 description = "The little ASGI library that shines."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "starlette-0.36.0-py3-none-any.whl", hash = "sha256:84edbd1d9e7a315390acd5789f1e4f93e834eb90f6a7d98450ef35e001ac3877"},
-    {file = "starlette-0.36.0.tar.gz", hash = "sha256:b1647c659133087906b83b762d5bb0d84ff3090c337de403c6e436354f53fc39"},
+    {file = "starlette-0.36.1-py3-none-any.whl", hash = "sha256:d5b43a72f475fd1b9707f661aa66da42d59ae16c9b2a5845b4edee4309c425ee"},
+    {file = "starlette-0.36.1.tar.gz", hash = "sha256:96df8541093dfd37624b5bf980802b99750db6718dd3ca341618fbbcdd6136fb"},
 ]
 
 [package.dependencies]
@@ -651,13 +651,13 @@ files = [
 
 [[package]]
 name = "uvicorn"
-version = "0.27.0"
+version = "0.27.0.post1"
 description = "The lightning-fast ASGI server."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "uvicorn-0.27.0-py3-none-any.whl", hash = "sha256:890b00f6c537d58695d3bb1f28e23db9d9e7a17cbcc76d7457c499935f933e24"},
-    {file = "uvicorn-0.27.0.tar.gz", hash = "sha256:c855578045d45625fd027367f7653d249f7c49f9361ba15cf9624186b26b8eb6"},
+    {file = "uvicorn-0.27.0.post1-py3-none-any.whl", hash = "sha256:4b85ba02b8a20429b9b205d015cbeb788a12da527f731811b643fd739ef90d5f"},
+    {file = "uvicorn-0.27.0.post1.tar.gz", hash = "sha256:54898fcd80c13ff1cd28bf77b04ec9dbd8ff60c5259b499b4b12bb0917f22907"},
 ]
 
 [package.dependencies]
@@ -903,4 +903,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "8198aa8c7e1b541d3eb4da9fd304b9ecde0d65767b90b5b32066d6943e430769"
+content-hash = "5e4e8c9ce3c86fed20a166b6d2cd4e177abcee21afc7db6c25f0c45117277d27"

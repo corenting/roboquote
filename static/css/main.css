@@ -1,9 +1,17 @@
+:root {
+    --pico-block-spacing-vertical: 5rem;
+}
+
 .center-text {
     text-align: center;
 }
 
 header {
     padding-bottom: 0px !important;
+}
+
+#form-submit {
+    margin-bottom: calc(var(--pico-spacing) / 2);
 }
 
 #introduction-text {

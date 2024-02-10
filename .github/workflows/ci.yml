@@ -11,14 +11,6 @@ on:
       - 'master'
 
 jobs:
-  commitlint:
-    name: Check commit messages (commitlint)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v5
   ci:
     name: Style and test
     runs-on: ubuntu-latest
@@ -42,7 +34,7 @@ jobs:
       run: make style
   docker:
     name: Build and push Docker images
-    needs: [commitlint, ci]
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

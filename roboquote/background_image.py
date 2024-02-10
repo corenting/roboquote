@@ -26,7 +26,7 @@ def get_random_background_search_query() -> str:
 
 async def get_random_background_from_unsplash_by_theme(
     background_search_query: str,
-) -> tuple[Image, ImageCredits]:
+) -> tuple[Image.Image, ImageCredits]:
     """Get a random background given a search query."""
     async with httpx.AsyncClient() as client:
         response = await client.get(

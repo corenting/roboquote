@@ -20,11 +20,13 @@ typer = "^0.9.0"
 uvicorn = {extras = ["standard"], version = "^0.27.0"}
 
 [tool.poetry.dev-dependencies]
-mypy = "*"
+pyright = "*"
 ruff = "*"
 
 [tool.ruff]
 target-version = "py312"
+
+[tool.ruff.lint]
 # Enable pycodestyle (E), Pyflakes (F), ruff rules (RUF),
 # flake8-comprehensions (C4), flake8-datetimez (DTZ), isort (I), pep8-naming (N)
 # pyupgrade (UP), flake8-async (ASYNC), flake8-bandit (S), perflint (PERF),
@@ -35,7 +37,7 @@ ignore = [
     "TRY003",  # Avoid specifying long messages outside the exception class
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 
 [tool.mypy]

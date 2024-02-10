@@ -28,7 +28,7 @@ def get_font_for_image(image_width: int) -> FreeTypeFont:
     return truetype(font_path, font_size)
 
 
-def get_dominant_color(image: Image) -> tuple[int, int, int, int]:
+def get_dominant_color(image: Image.Image) -> tuple[int, int, int, int]:
     """Get the dominant color of an image as a tuple."""
     img = image.copy()
     img = img.convert("RGBA")
@@ -223,6 +223,6 @@ def fit_text(
             return (trial_font, wrapped_text)
 
     # Give up and wrap the text at the last size
-    wrapped_text = wrap_text(trial_font, text, max_width, direction)
+    wrapped_text = wrap_text(trial_font, text, max_width, direction)  # pyright: ignore
 
-    return (trial_font, wrapped_text)
+    return (trial_font, wrapped_text)  # pyright: ignore

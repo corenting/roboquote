@@ -2,6 +2,7 @@
 
 from typing import Any
 
+from loguru import logger
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse, Response
@@ -13,9 +14,11 @@ from roboquote.web.routes import generate, health, index
 
 
 async def http_exception(request: Any, exc: Exception) -> Response:
+    if config.DEBUG:
+        logger.exception(exc)
     return JSONResponse(
-        {"error": str(exc)},
-        status_code=exc.status_code if hasattr(exc, "status_code") else 500,
+        {"error": getattr(exc, "detail", str(exc))},
+        status_code=getattr(exc, "status_code", 500),
     )
 
 

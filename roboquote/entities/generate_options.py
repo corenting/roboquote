@@ -9,7 +9,7 @@ class GenerateOptions:
     """The options when generating a image."""
 
     text: str
-    background_image: Image
+    background_image: Image.Image
 
     blur: bool
     blur_intensity: int | None

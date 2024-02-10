@@ -99,11 +99,28 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
     }
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(
-            constants.HUGGING_FACE_BASE_API_URL + text_model.value,
-            headers=headers,
-            json=data,
-        )
+        try:
+            response = await client.post(
+                constants.HUGGING_FACE_BASE_API_URL + text_model.value,
+                headers=headers,
+                json=data,
+            )
+        except httpx.TimeoutException as e:
+            raise CannotGenerateQuoteError(
+                "Timeout when calling Hugging Face API"
+            ) from e
+
+    # Error case with error message
+    if not response.is_success:
+        error = "Unknown error"
+        try:
+            error: str = response.json()["error"]
+        except (KeyError, json.JSONDecodeError):
+            error = response.reason_phrase
+        finally:
+            raise CannotGenerateQuoteError(
+                f'Error when calling Hugging Face API: "{error}"'
+            )
 
     try:
         response_content = json.loads(response.content.decode("utf-8"))
@@ -112,12 +129,6 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
         )
     except json.JSONDecodeError as e:
         raise CannotGenerateQuoteError() from e
-
-    # Error case with error message
-    if not response.is_success:
-        raise CannotGenerateQuoteError(
-            response_content.get("error", "Unknown error from Hugging Face.")
-        )
 
     text: str = response_content[0]["generated_text"]
     text = text.replace(prompt, "")

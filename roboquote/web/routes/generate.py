@@ -3,6 +3,7 @@ import json
 from dataclasses import asdict
 from io import BytesIO
 
+from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Route
@@ -11,6 +12,7 @@ from roboquote.background_image import (
     get_random_background_from_unsplash_by_theme,
     get_random_background_search_query,
 )
+from roboquote.entities.exceptions import CannotGenerateQuoteError
 from roboquote.entities.generate_options import GenerateOptions
 from roboquote.entities.text_model import TextModel
 from roboquote.quote_text_generation import get_random_quote
@@ -35,7 +37,10 @@ async def generate(request: Request) -> Response:
     ) = await get_random_background_from_unsplash_by_theme(background)
 
     # Get text to use
-    text = await get_random_quote(background, text_model)
+    try:
+        text = await get_random_quote(background, text_model)
+    except CannotGenerateQuoteError as e:
+        raise HTTPException(500, str(e)) from e
 
     # Generate image
     generate_options = GenerateOptions(

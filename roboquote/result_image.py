@@ -7,7 +7,7 @@ from roboquote.entities.generate_options import GenerateOptions
 from roboquote.helpers.pillow import fit_text, get_dominant_color, get_font_for_image
 
 
-def generate_image(options: GenerateOptions) -> Image:
+def generate_image(options: GenerateOptions) -> Image.Image:
     """Generate and return an image
     with the given filename for a given text and category.
     """

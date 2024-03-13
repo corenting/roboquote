@@ -1,4 +1,5 @@
 """Constants used in the code."""
+
 from roboquote.entities.text_model import TextModel
 
 FONTS_PATH = "fonts"

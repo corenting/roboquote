@@ -4,6 +4,7 @@
 by atomicparade (https://github.com/atomicparade) for the text wrapping
 - From https://stackoverflow.com/a/61730849 for the dominant color function
 """
+
 import os
 import random
 

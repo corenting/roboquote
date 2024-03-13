@@ -1,4 +1,5 @@
 """Handle the route for image generation."""
+
 import json
 from dataclasses import asdict
 from io import BytesIO

@@ -1,4 +1,5 @@
 """Handle health-related routes."""
+
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route

@@ -1,4 +1,5 @@
 """Entity to represent the generation options."""
+
 from dataclasses import dataclass
 
 from PIL import Image

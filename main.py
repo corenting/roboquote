@@ -1,4 +1,5 @@
 """Main CLI entrypoint."""
+
 import asyncio
 
 import typer

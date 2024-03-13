@@ -1,4 +1,5 @@
 """Handle the generation of the quote."""
+
 import json
 import random
 import re

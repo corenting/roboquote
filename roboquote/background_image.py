@@ -1,4 +1,5 @@
 """Functions to get a background for the result image."""
+
 import random
 from io import BytesIO
 

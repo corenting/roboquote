@@ -1,4 +1,5 @@
 """Handle the configuration loaded from the environment."""
+
 from environs import Env
 
 env = Env()

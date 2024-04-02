@@ -60,20 +60,30 @@ def _cleanup_text(generated_text: str) -> str:
     logger.debug(f'Cleaning up quote: "{generated_text}"')
 
     cleaned_quote = generated_text.strip()
-
-    # If the model generated a quoted text, get text inside quote
-    # Get the longest string in case we match some smaller fragments
-    # of text.
     regex_quotes_list = r"\"\“\«\”"
-    regex_results = re.findall(
-        rf"[{regex_quotes_list}]*([^{regex_quotes_list}]+)[{regex_quotes_list}]*",
-        cleaned_quote,
-    )
-    if len(regex_results) > 0:
-        cleaned_quote = max(regex_results, key=len)
 
-    # Remove other lines if multiple lines
-    cleaned_quote = cleaned_quote.partition("\n")[0]
+    # First, if we match only one quote, return this one
+    single_quote_regex = (
+        rf"[{regex_quotes_list}]([^{regex_quotes_list}]*)[{regex_quotes_list}]"
+    )
+    single_quote_results = re.findall(single_quote_regex, cleaned_quote)
+    if len(single_quote_results) == 1:
+        cleaned_quote = single_quote_results[0]
+    else:
+        # Else, if the model generated a quoted text, try to get text inside quote.
+        # Get the longest string in case we match some smaller fragments of text.
+        built_regex = (
+            rf"[{regex_quotes_list}]*([^{regex_quotes_list}]+)[{regex_quotes_list}]*"
+        )
+        regex_results = re.findall(
+            built_regex,
+            cleaned_quote,
+        )
+        if len(regex_results) > 0:
+            cleaned_quote = max(regex_results, key=len)
+
+        # Remove other lines if multiple lines
+        cleaned_quote = cleaned_quote.partition("\n")[0]
 
     logger.debug(f"Cleaned quote: {cleaned_quote}")
     return cleaned_quote

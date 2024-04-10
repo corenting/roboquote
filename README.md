@@ -4,6 +4,7 @@ Generate random "inspirational" quotes images by using an AI text generation mod
 
 The following models can be used:
 - [bigscience/bloom](https://huggingface.co/bigscience/bloom)
+- [CohereForAI/c4ai-command-r-plus](https://huggingface.co/CohereForAI/c4ai-command-r-plus)
 - [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1)
 
 ## Examples
@@ -30,6 +31,7 @@ See `poetry run python main.py --help` for the available options.
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
 - [BigScience Workshop](https://huggingface.co/bigscience/) for the BLOOM model used
-- [Mistral AI](https://mistral.ai/) for the Mistral-7B-Instruct-v0.1 model used
+- [Cohere](https://cohere.com/) for the mistralai/Mixtral-8x7B-Instruct-v0.1 model used
 - [Hugging Face](https://huggingface.co/) for the inference API
+- [Mistral AI](https://mistral.ai/) for the Mistral-7B-Instruct-v0.1 model used
 - [Unsplash](unsplash.com) for the background images.

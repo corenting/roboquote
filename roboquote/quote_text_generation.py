@@ -11,33 +11,46 @@ from roboquote import config, constants
 from roboquote.entities.exceptions import CannotGenerateQuoteError
 from roboquote.entities.text_model import TextModel
 
+PROMPT_CONTINUE = [
+    "On a {background_search_query} themed picture, "
+    + "there was a fitting inspirational quote: ",
+    "On a {background_search_query} themed inspirational picture, "
+    + "there was a fitting inspirational short quote: ",
+    "On a {background_search_query} themed inspirational picture, "
+    + "there was a fitting short quote: ",
+]
+
+PROMPT_INSTRUCT = [
+    "Give me a inspirational quote "
+    + "that fits on a {background_search_query} themed picture, "
+    + "similar to old Tumblr pictures. You must return the quote text directly."
+    + "Do not return lists. "
+    + "The quote must be in english. "
+    + "The quote must exactly one sentence."
+]
+
 
 def _get_base_prompt_by_model(
     background_search_query: str, text_model: TextModel
 ) -> str:
     """Get base prompt by model"""
     if text_model == TextModel.BLOOM:
-        prompts = [
-            f"On a {background_search_query} themed picture, "
-            + "there was a fitting inspirational quote: ",
-            f"On a {background_search_query} themed inspirational picture, "
-            + "there was a fitting inspirational short quote: ",
-            f"On a {background_search_query} themed inspirational picture, "
-            + "there was a fitting short quote: ",
-        ]
+        prompts = PROMPT_CONTINUE
     elif text_model == TextModel.MISTRAL_8X7B_INSTRUCT:
+        prompts = [f"<s>[[INST]{prompt}[/INST]" for prompt in PROMPT_INSTRUCT]
+    elif text_model == TextModel.COHERE_COMMAND_R_PLUS:
         prompts = [
-            "[INST] Give me a inspirational quote "
-            + f"that fits a {background_search_query} themed picture, "
-            + "similar to old Tumblr pictures. Give me the quote text "
-            + "without any surrounding text. Do not return lists. "
-            + "The quote must be in english. "
-            + "The quote must exactly one sentence.[/INST]"
+            "<BOS_TOKEN><|START_OF_TURN_TOKEN|><|USER_TOKEN|>"
+            + prompt
+            + "<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>"
+            for prompt in PROMPT_INSTRUCT
         ]
     else:
         raise ValueError("model not supported")
 
-    return random.choice(prompts)
+    return random.choice(prompts).format(
+        background_search_query=background_search_query
+    )
 
 
 def _get_random_prompt(background_search_query: str, text_model: TextModel) -> str:
@@ -47,7 +60,9 @@ def _get_random_prompt(background_search_query: str, text_model: TextModel) -> s
 
     # Randomly replace "picture" with "photography"
     if random.randint(0, 1) == 0:
-        prompt = prompt.replace("picture", "photography")
+        prompt = prompt.replace("picture ", "photography ")
+        prompt = prompt.replace("picture,", "photography,")
+        prompt = prompt.replace("picture.", "photography.")
 
     return prompt
 
@@ -115,6 +130,7 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
                 constants.HUGGING_FACE_BASE_API_URL + text_model.value,
                 headers=headers,
                 json=data,
+                timeout=15,
             )
         except httpx.TimeoutException as e:
             raise CannotGenerateQuoteError(

@@ -38,13 +38,6 @@ def _get_base_prompt_by_model(
         prompts = PROMPT_CONTINUE
     elif text_model == TextModel.MISTRAL_8X7B_INSTRUCT:
         prompts = [f"<s>[[INST]{prompt}[/INST]" for prompt in PROMPT_INSTRUCT]
-    elif text_model == TextModel.COHERE_COMMAND_R_PLUS:
-        prompts = [
-            "<BOS_TOKEN><|START_OF_TURN_TOKEN|><|USER_TOKEN|>"
-            + prompt
-            + "<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>"
-            for prompt in PROMPT_INSTRUCT
-        ]
     else:
         raise ValueError("model not supported")
 

@@ -44,6 +44,7 @@ It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvico
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
 - [BigScience Workshop](https://huggingface.co/bigscience/) for the BLOOM model used
+- [Google Fonts](https://fonts.google.com/) for the fonts used in the pictures.
 - [Hugging Face](https://huggingface.co/) for the inference API
 - [Mistral AI](https://mistral.ai/) for the Mistral-7B-Instruct-v0.1 model used
 - [Unsplash](unsplash.com) for the background images.

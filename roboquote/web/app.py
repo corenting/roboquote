@@ -14,7 +14,7 @@ from roboquote.web.routes import generate, health, index
 
 
 async def http_exception(request: Any, exc: Exception) -> Response:
-    if config.DEBUG:
+    if config.WEB_DEBUG:
         logger.exception(exc)
     return JSONResponse(
         {"error": getattr(exc, "detail", str(exc))},
@@ -28,7 +28,7 @@ exception_handlers = {
 }
 
 app = Starlette(
-    debug=config.DEBUG,
+    debug=config.WEB_DEBUG,
     routes=[
         index.route,
         Mount("/static", app=StaticFiles(directory="static"), name="static"),

@@ -4,8 +4,8 @@ Generate random "inspirational" quotes images by using an AI text generation mod
 
 The following models can be used:
 - [bigscience/bloom](https://huggingface.co/bigscience/bloom)
-- [CohereForAI/c4ai-command-r-plus](https://huggingface.co/CohereForAI/c4ai-command-r-plus)
 - [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1)
+- [CohereForAI/c4ai-command-r-plus](https://huggingface.co/CohereForAI/c4ai-command-r-plus) (only with a Hugging Face Pro account)
 
 ## Examples
 
@@ -21,11 +21,25 @@ The following models can be used:
 
 ## Usage
 
+### Installation
 1. Install the project with [poetry](https://python-poetry.org/) by doing `poetry install`.
-2. Set an environment variable `HUGGING_FACE_API_TOKEN` with your Hugging Face Inference API token. The project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files).
-3. Run `poetry run python main.py my_file.jpg` to generate a new random image.
+2. Set environment variables for configuration (the project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files)):
+    - `HUGGING_FACE_API_TOKEN` (**required**): your Hugging Face Inference API token.
+    - `LOG_LEVEL` (optional, default is `WARNING`): log level of the application
+    - `WEB_DEBUG` (optional, default is `False`): if you want to run the web app in debug mode (should not be required)
+    - `HIDE_HUGGING
+
+### CLI usage
+
+Run `poetry run python main.py my_file.jpg` to generate a new random image.
 
 See `poetry run python main.py --help` for the available options.
+
+### Web usage
+
+The web version is a [Starlette](https://pypi.org/project/starlette/) application (`roboquote.web.app:app`).
+
+It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvicorn/) through the `make run-web` command.
 
 ## Credits
 

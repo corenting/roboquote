@@ -85,7 +85,7 @@ function handleGeneration(background, text_model, blur) {
 					);
 
 					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.<br />
-					Generated with ${generationInfo.text_model} on Hugging Face.
+					Generated with ${generationInfo.model_used} on ${generationInfo.api_used}.
 					`;
 				});
 			} else {

@@ -1,7 +1,9 @@
 """Main CLI entrypoint."""
 
 import asyncio
+from typing import Annotated
 
+import click
 import typer
 
 from roboquote.background_image import (
@@ -9,7 +11,10 @@ from roboquote.background_image import (
     get_random_background_search_query,
 )
 from roboquote.entities.generate_options import GenerateOptions
-from roboquote.entities.text_model import TextModel
+from roboquote.entities.large_language_model import (
+    AVAILABLE_LARGE_LANGUAGE_MODELS,
+    AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES,
+)
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
 
@@ -19,22 +24,32 @@ app = typer.Typer()
 @app.command()
 def generate(
     filename: str,
-    blur: bool = typer.Option(True, help="Add a blur on the background."),
-    blur_intensity: int | None = typer.Option(
-        None, help="If blur is enabled,the blur intensity level."
-    ),
-    background: str | None = typer.Option(
-        default=None,
-        help="If specified, use this string as the search query "
-        + "for the background image instead of a random one. "
-        + "Works best with simple queries like 'mountain', 'sea' etc.",
-    ),
-    text_model: TextModel = typer.Option(
-        default=TextModel.MISTRAL_8X7B_INSTRUCT.value,
-        help="The text generation model to use.",
-    ),
+    blur: Annotated[bool, typer.Option(help="Add a blur on the background.")] = True,
+    blur_intensity: Annotated[
+        int | None, typer.Option(help="If blur is enabled,the blur intensity level.")
+    ] = None,
+    background: Annotated[
+        str | None,
+        typer.Option(
+            help="If specified, use this string as the search query "
+            + "for the background image instead of a random one. "
+            + "Works best with simple queries like 'mountain', 'sea' etc.",
+        ),
+    ] = None,
+    model_name: Annotated[
+        str,
+        typer.Option(
+            click_type=click.Choice(AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES),
+            help="The name of the LLM to use for the text generation.",
+        ),
+    ] = AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES[0],
 ) -> None:
     """Generate a new image with the given filename."""
+    # Get model
+    large_language_model = next(
+        model for model in AVAILABLE_LARGE_LANGUAGE_MODELS if model.name == model_name
+    )
+
     # Get a random background category if not specified
     if background is None:
         background = get_random_background_search_query()
@@ -55,7 +70,7 @@ def generate(
     )
 
     # Get text to use
-    text = asyncio.run(get_random_quote(background, text_model))
+    text = asyncio.run(get_random_quote(background, large_language_model))
 
     # Generate and save image
     generated_image = generate_image(

@@ -10,6 +10,10 @@ header {
     padding-bottom: 0px !important;
 }
 
+summary {
+    font-weight: bold;
+}
+
 #form-submit {
     margin-bottom: calc(var(--pico-spacing) / 2);
 }

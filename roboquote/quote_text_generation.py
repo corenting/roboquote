@@ -7,9 +7,13 @@ import re
 import httpx
 from loguru import logger
 
-from roboquote import config, constants
+from roboquote import config
 from roboquote.entities.exceptions import CannotGenerateQuoteError
-from roboquote.entities.text_model import TextModel
+from roboquote.entities.large_language_model import (
+    LargeLanguageModel,
+    LargeLanguageModelAPI,
+    LargeLanguageModelPromptType,
+)
 
 PROMPT_CONTINUE = [
     "On a {background_search_query} themed picture, "
@@ -31,22 +35,27 @@ PROMPT_INSTRUCT = [
 
 
 def _get_base_prompt_by_model(
-    background_search_query: str, text_model: TextModel
+    background_search_query: str, text_model: LargeLanguageModel
 ) -> str:
     """Get base prompt by model"""
-    if text_model == TextModel.BLOOM:
+    if text_model.prompt_type == LargeLanguageModelPromptType.CONTINUE:
         prompts = PROMPT_CONTINUE
-    elif text_model == TextModel.MISTRAL_8X7B_INSTRUCT:
-        prompts = [f"<s>[[INST]{prompt}[/INST]" for prompt in PROMPT_INSTRUCT]
+    elif text_model.prompt_type == LargeLanguageModelPromptType.INSTRUCT:
+        prompts = [
+            f"{text_model.prompt_start}{prompt}{text_model.prompt_end}"
+            for prompt in PROMPT_INSTRUCT
+        ]
     else:
-        raise ValueError("model not supported")
+        raise ValueError("prompt type not supported")
 
     return random.choice(prompts).format(
         background_search_query=background_search_query
     )
 
 
-def _get_random_prompt(background_search_query: str, text_model: TextModel) -> str:
+def _get_random_prompt(
+    background_search_query: str, text_model: LargeLanguageModel
+) -> str:
     """Get a random prompt for the model."""
 
     prompt = _get_base_prompt_by_model(background_search_query, text_model)
@@ -97,13 +106,12 @@ def _cleanup_text(generated_text: str) -> str:
     return cleaned_quote
 
 
-async def get_random_quote(background_search_query: str, text_model: TextModel) -> str:
-    """For a given background category, get a random quote."""
-    prompt = _get_random_prompt(background_search_query, text_model)
-    logger.debug(f'Prompt for {text_model.value}: "{prompt}"')
-
+async def _get_quote_from_hugging_face(model: LargeLanguageModel, prompt: str) -> str:
+    """
+    Get a quote using Hugging Face for the given model and prompt.
+    """
     headers = {
-        "Authorization": f"Bearer {config.HUGGING_FACE_API_TOKEN}",
+        "Authorization": f"Bearer {config.HUGGING_FACE_ACCESS_TOKEN}",
         "Content-Type": "application/json",
     }
     data = {
@@ -120,7 +128,7 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(
-                constants.HUGGING_FACE_BASE_API_URL + text_model.value,
+                f"https://api-inference.huggingface.co/models/{model.name}",
                 headers=headers,
                 json=data,
                 timeout=15,
@@ -152,5 +160,66 @@ async def get_random_quote(background_search_query: str, text_model: TextModel) 
 
     text: str = response_content[0]["generated_text"]
     text = text.replace(prompt, "")
+    return text
+
+
+async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str):
+    """
+    Get a quote using GroqCloud for the given model and prompt.
+    """
+    headers = {
+        "Authorization": f"Bearer {config.GROQ_CLOUD_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    data = {"messages": [{"role": "user", "content": prompt}], "model": model.name}
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers=headers,
+                json=data,
+                timeout=15,
+            )
+        except httpx.TimeoutException as e:
+            raise CannotGenerateQuoteError("Timeout when calling GroqCloud API") from e
+
+    # Error case with error message
+    if not response.is_success:
+        error = "Unknown error"
+        try:
+            error: str = response.json()["error"]
+        except (KeyError, json.JSONDecodeError):
+            error = response.reason_phrase
+        finally:
+            raise CannotGenerateQuoteError(
+                f'Error when calling GroqCloud API: "{error}"'
+            )
+
+    try:
+        response_content = json.loads(response.content.decode("utf-8"))
+        logger.debug(
+            f"GroqCloud API response {response.status_code}: {response_content}"
+        )
+    except json.JSONDecodeError as e:
+        raise CannotGenerateQuoteError() from e
+
+    text: str = response_content["choices"][0]["message"]["content"]
+    return text
+
+
+async def get_random_quote(
+    background_search_query: str, text_model: LargeLanguageModel
+) -> str:
+    """For a given background category, get a random quote."""
+    prompt = _get_random_prompt(background_search_query, text_model)
+    logger.debug(f'Prompt for {text_model.name}: "{prompt}"')
+
+    if text_model.api == LargeLanguageModelAPI.HUGGING_FACE:
+        text = await _get_quote_from_hugging_face(text_model, prompt)
+    elif text_model.api == LargeLanguageModelAPI.GROQ_CLOUD:
+        text = await _get_quote_from_groq_cloud(text_model, prompt)
+    else:
+        raise ValueError("API not supported")
 
     return _cleanup_text(text)

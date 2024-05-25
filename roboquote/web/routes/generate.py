@@ -15,7 +15,9 @@ from roboquote.background_image import (
 )
 from roboquote.entities.exceptions import CannotGenerateQuoteError
 from roboquote.entities.generate_options import GenerateOptions
-from roboquote.entities.text_model import TextModel
+from roboquote.entities.large_language_model import (
+    AVAILABLE_LARGE_LANGUAGE_MODELS,
+)
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
 
@@ -28,7 +30,11 @@ async def generate(request: Request) -> Response:
         background = str(request.query_params["background"])
     else:
         background = get_random_background_search_query()
-    text_model = TextModel(str(request.query_params["text_model"]))
+    text_model = next(
+        model
+        for model in AVAILABLE_LARGE_LANGUAGE_MODELS
+        if model.name == str(request.query_params["text_model"])
+    )
     blur: bool = True if request.query_params.get("blur", "on") == "on" else False
 
     # Get background image
@@ -64,7 +70,8 @@ async def generate(request: Request) -> Response:
                 {
                     "background": background,
                     "blur": blur,
-                    "text_model": text_model.value,
+                    "model_used": text_model.name,
+                    "api_used": text_model.api.value,
                 }
             ),
         },

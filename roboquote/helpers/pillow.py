@@ -34,7 +34,7 @@ def get_dominant_color(image: Image.Image) -> tuple[int, int, int, int]:
     img = image.copy()
     img = img.convert("RGBA")
     img = img.resize((1, 1), resample=0)
-    return img.getpixel((0, 0))
+    return img.getpixel((0, 0))  # type: ignore
 
 
 def wrap_text(

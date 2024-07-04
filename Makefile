@@ -13,7 +13,7 @@ format:
 	$(PYTHON) ruff format $(SRC)
 	$(PYTHON) ruff check --fix $(SRC)
 	$(BIOME) format --write $(JS_SRC)
-	$(BIOME) check --apply $(JS_SRC)
+	$(BIOME) check --write $(JS_SRC)
 
 .PHONY: style
 style:

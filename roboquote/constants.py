@@ -6,7 +6,6 @@ from roboquote.entities.large_language_model import (
     LargeLanguageModelPromptType,
 )
 
-
 FONTS_PATH = "fonts"
 
 # Ordered by preferred models

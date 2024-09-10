@@ -15,12 +15,6 @@ def generate_image(options: GenerateOptions) -> Image.Image:
     width = image.width
     height = image.height
 
-    # Get dominant background color
-    dominant_bg_r, dominant_bg_g, dominant_bg_b, _ = get_dominant_color(image)
-    luma = dominant_bg_r * 0.299 + dominant_bg_g * 0.587 + dominant_bg_b * 0.114
-    logger.debug(f"Background luma: {luma}")
-    text_color = "#000000" if luma > 200 else "#FFFFFF"
-
     if options.blur:
         blur_intensity = (
             options.blur_intensity if options.blur_intensity is not None else 5
@@ -30,17 +24,35 @@ def generate_image(options: GenerateOptions) -> Image.Image:
     draw = ImageDraw.Draw(image)
 
     font = get_font_for_image(width)
-    font, fitted_text = fit_text(font, options.text, width - 200, height - 200)
+    font, fitted_text = fit_text(
+        font, options.text, int(width / 1.2), int(height / 1.2)
+    )
 
+    # Compute position for text
+    common_args = {
+        "xy": (width / 2, height / 2),
+        "text": fitted_text,
+        "anchor": "mm",
+        "align": "center",
+        "font": font,
+    }
+
+    # Get bounding box of text
+    text_bounding_box = draw.multiline_textbbox(**common_args)
+
+    # For the bounding box of the text, get dominant color to compute text color
+    dominant_bg_r, dominant_bg_g, dominant_bg_b, _ = get_dominant_color(
+        image, text_bounding_box
+    )
+    luma = dominant_bg_r * 0.299 + dominant_bg_g * 0.587 + dominant_bg_b * 0.114
+    logger.debug(f"Background luma: {luma}")
+    text_color = "#000000" if luma > 170 else "#FFFFFF"
+
+    # Draw the text
     draw.multiline_text(
-        (width / 2, height / 2),
-        fitted_text,
-        anchor="mm",
-        align="center",
-        font=font,
         fill=text_color,
-        stroke_width=2,
         stroke_fill="#000000" if text_color == "#FFFFFF" else "#FFFFFF",
+        **common_args,
     )
 
     return image

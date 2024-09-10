@@ -18,4 +18,4 @@ class LargeLanguageModel:
     prompt_type: LargeLanguageModelPromptType
     api: LargeLanguageModelAPI
     prompt_start: str = ""
-    prompt_end: str  = ""
+    prompt_end: str = ""

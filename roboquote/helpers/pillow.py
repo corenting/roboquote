@@ -29,9 +29,12 @@ def get_font_for_image(image_width: int) -> FreeTypeFont:
     return truetype(font_path, font_size)
 
 
-def get_dominant_color(image: Image.Image) -> tuple[int, int, int, int]:
-    """Get the dominant color of an image as a tuple."""
+def get_dominant_color(
+    image: Image.Image, bounding_box: tuple[int, int, int, int]
+) -> tuple[int, int, int, int]:
+    """Get the dominant color of an image as a tuple, for the given bounding box."""
     img = image.copy()
+    img = img.crop(bounding_box)
     img = img.convert("RGBA")
     img = img.resize((1, 1), resample=0)
     return img.getpixel((0, 0))  # type: ignore

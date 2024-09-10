@@ -10,7 +10,11 @@ from roboquote.background_image import (
     get_random_background_from_unsplash_by_theme,
     get_random_background_search_query,
 )
-from roboquote.constants import AVAILABLE_LARGE_LANGUAGE_MODELS, AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES, DEFAULT_LARGE_LANGUAGE_MODEL
+from roboquote.constants import (
+    AVAILABLE_LARGE_LANGUAGE_MODELS,
+    AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES,
+    DEFAULT_LARGE_LANGUAGE_MODEL,
+)
 from roboquote.entities.generate_options import GenerateOptions
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image

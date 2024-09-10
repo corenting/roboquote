@@ -17,5 +17,5 @@ class LargeLanguageModel:
     name: str
     prompt_type: LargeLanguageModelPromptType
     api: LargeLanguageModelAPI
-    prompt_start: str | None = None
-    prompt_end: str | None = None
+    prompt_start: str = ""
+    prompt_end: str  = ""

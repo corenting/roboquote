@@ -10,11 +10,8 @@ from roboquote.background_image import (
     get_random_background_from_unsplash_by_theme,
     get_random_background_search_query,
 )
+from roboquote.constants import AVAILABLE_LARGE_LANGUAGE_MODELS, AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES, DEFAULT_LARGE_LANGUAGE_MODEL
 from roboquote.entities.generate_options import GenerateOptions
-from roboquote.entities.large_language_model import (
-    AVAILABLE_LARGE_LANGUAGE_MODELS,
-    AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES,
-)
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
 
@@ -42,7 +39,7 @@ def generate(
             click_type=click.Choice(AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES),
             help="The name of the LLM to use for the text generation.",
         ),
-    ] = AVAILABLE_LARGE_LANGUAGE_MODELS_NAMES[0],
+    ] = DEFAULT_LARGE_LANGUAGE_MODEL.name,
 ) -> None:
     """Generate a new image with the given filename."""
     # Get model

@@ -40,7 +40,7 @@ def _get_base_prompt_by_model(
     """Get base prompt by model"""
     if text_model.prompt_type == LargeLanguageModelPromptType.CONTINUE:
         prompts = PROMPT_CONTINUE
-    elif text_model.prompt_type == LargeLanguageModelPromptType.INSTRUCT:
+    elif text_model.prompt_type == LargeLanguageModelPromptType.CHAT:
         prompts = [
             f"{text_model.prompt_start}{prompt}{text_model.prompt_end}"
             for prompt in PROMPT_INSTRUCT

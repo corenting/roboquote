@@ -44,4 +44,4 @@ ENV LOG_LEVEL=WARNING
 
 # Expose and run app
 EXPOSE 8080
-CMD ["dumb-init", "/app/.venv/bin/uvicorn", "roboquote.web.app:app", "--workers", "2", "--port", "8080", "--log-file=-"]
+CMD ["dumb-init", "/app/.venv/bin/uvicorn", "roboquote.web.app:app", "--workers", "2", "--host", "0.0.0.0", "--port", "8080"]

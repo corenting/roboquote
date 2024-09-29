@@ -3,7 +3,6 @@
 from roboquote.entities.large_language_model import (
     LargeLanguageModel,
     LargeLanguageModelAPI,
-    LargeLanguageModelPromptType,
 )
 
 FONTS_PATH = "fonts"
@@ -11,21 +10,16 @@ FONTS_PATH = "fonts"
 # Ordered by preferred models
 AVAILABLE_LARGE_LANGUAGE_MODELS = [
     LargeLanguageModel(
-        name="llama3-70b-8192",
-        prompt_type=LargeLanguageModelPromptType.CHAT,
+        name="llama-3.1-70b-versatile",
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(
-        name="mistralai/Mixtral-8x7B-Instruct-v0.1",
-        prompt_type=LargeLanguageModelPromptType.CHAT,
-        api=LargeLanguageModelAPI.HUGGING_FACE,
-        prompt_start="<s>[INST]",
-        prompt_end="[/INST]",
+        name="gemma2-9b-it",
+        api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(
-        name="bigscience/bloom",
-        prompt_type=LargeLanguageModelPromptType.CONTINUE,
-        api=LargeLanguageModelAPI.HUGGING_FACE,
+        name="mixtral-8x7b-32768",
+        api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
 ]
 

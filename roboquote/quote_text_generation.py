@@ -24,7 +24,7 @@ PROMPT_CONTINUE = [
     + "there was a fitting short quote: ",
 ]
 
-PROMPT_INSTRUCT = [
+PROMPT_CHAT = [
     "Give me a inspirational quote "
     + "that fits on a {background_search_query} themed picture, "
     + "similar to old Tumblr pictures. You must return the quote text directly."
@@ -43,7 +43,7 @@ def _get_base_prompt_by_model(
     elif text_model.prompt_type == LargeLanguageModelPromptType.CHAT:
         prompts = [
             f"{text_model.prompt_start}{prompt}{text_model.prompt_end}"
-            for prompt in PROMPT_INSTRUCT
+            for prompt in PROMPT_CHAT
         ]
     else:
         raise ValueError("prompt type not supported")

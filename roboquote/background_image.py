@@ -2,8 +2,10 @@
 
 import random
 from io import BytesIO
+import httpx, ssl, certifi
 
 import httpx
+from loguru import logger
 from PIL import Image
 
 from roboquote.entities.exceptions import CannotFetchBackgroundError
@@ -29,14 +31,20 @@ async def get_random_background_from_unsplash_by_theme(
     background_search_query: str,
 ) -> tuple[Image.Image, ImageCredits]:
     """Get a random background given a search query."""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "https://unsplash.com/napi/search/photos?query="
-            + background_search_query
-            + " background&orientation=landscape"
-        )
+
+    # The default httpx verify context doesn't work with
+    # unsplash, it results in 403 errors
+    context = ssl.create_default_context()
+    context.load_verify_locations(certifi.where())
+
+    async with httpx.AsyncClient(verify=context) as client:
+        url = f"https://unsplash.com/napi/search/photos?orientation=landscape&page=1&per_page=20&plus=none&query={background_search_query} background&xp=search-disable-curation:experiment"
+        response = await client.get(url)
 
     if not response.is_success:
+        logger.debug(
+            f"Error {response.status_code} from Unsplash API",
+        )
         raise CannotFetchBackgroundError()
 
     content = response.json()["results"]

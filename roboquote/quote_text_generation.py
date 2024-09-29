@@ -163,7 +163,7 @@ async def _get_quote_from_hugging_face(model: LargeLanguageModel, prompt: str) -
     return text
 
 
-async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str):
+async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str) -> str:
     """
     Get a quote using GroqCloud for the given model and prompt.
     """

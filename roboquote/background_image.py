@@ -1,9 +1,10 @@
 """Functions to get a background for the result image."""
 
 import random
+import ssl
 from io import BytesIO
-import httpx, ssl, certifi
 
+import certifi
 import httpx
 from loguru import logger
 from PIL import Image
@@ -38,7 +39,11 @@ async def get_random_background_from_unsplash_by_theme(
     context.load_verify_locations(certifi.where())
 
     async with httpx.AsyncClient(verify=context) as client:
-        url = f"https://unsplash.com/napi/search/photos?orientation=landscape&page=1&per_page=20&plus=none&query={background_search_query} background&xp=search-disable-curation:experiment"
+        url = (
+            "https://unsplash.com/napi/search/photos?orientation=landscape&page=1"
+            "&per_page=20&plus=none&query={background_search_query} background"
+            "&xp=search-disable-curation:experiment"
+        )
         response = await client.get(url)
 
     if not response.is_success:

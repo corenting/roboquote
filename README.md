@@ -3,9 +3,9 @@
 Generate random "inspirational" quotes images by using an AI text generation model.
 
 The following models can be used:
-- [bigscience/bloom](https://huggingface.co/bigscience/bloom) through Hugging Face Inference API
-- [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1) through Hugging Face Inference API
-- [meta-llama/Meta-Llama-3-70B](https://huggingface.co/meta-llama/Meta-Llama-3-70B) through GroqCloud API
+- [meta-llama/Llama-3.1-70B](https://huggingface.co/meta-llama/Llama-3.1-70B) through [GroqCloud API](https://console.groq.com/playground)
+- [google/gemma-2-9b-it](https://huggingface.co/google/gemma-2-9b-it) through [GroqCloud API](https://console.groq.com/playground)
+- [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1) through [GroqCloud API](https://console.groq.com/playground)
 
 ## Examples
 
@@ -24,7 +24,6 @@ The following models can be used:
 ### Installation
 1. Install the project with [poetry](https://python-poetry.org/) by doing `poetry install`.
 2. Set environment variables for configuration (the project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files)):
-    - `HUGGING_FACE_ACCESS_TOKEN` (**required**): your Hugging Face access token for their Inference API
     - `GROQ_CLOUD_API_KEY` (**required**): your GroqCloud API key for their API
     - `LOG_LEVEL` (optional, default is `WARNING`): log level of the application
     - `WEB_DEBUG` (optional, default is `False`): if you want to run the web app in debug mode (should not be required)
@@ -44,9 +43,9 @@ It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvico
 ## Credits
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
-- [BigScience Workshop](https://huggingface.co/bigscience/) for the BLOOM model used
-- [Google Fonts](https://fonts.google.com/) for the fonts used in the pictures.
+- [Google Fonts](https://fonts.google.com/) for the fonts used in the pictures
+- [Google](https://huggingface.co/google) for the gemma-2-9b-it model used
 - [Groq](https://groq.com/) for their inference API
-- [Hugging Face](https://huggingface.co/) for the inference API
+- [Meta](https://huggingface.co/meta-llama) for the Llama-3.1-70B model used
 - [Mistral AI](https://mistral.ai/) for the Mistral-7B-Instruct-v0.1 model used
-- [Unsplash](unsplash.com) for the background images.
+- [Unsplash](unsplash.com) for the background images

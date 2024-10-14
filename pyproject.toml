@@ -16,7 +16,7 @@ loguru = "^0.7.2"
 pillow = "^10.3.0"
 starlette = "^0.39.0"
 typer = "^0.12.4"
-uvicorn = {extras = ["standard"], version = "^0.31.0"}
+uvicorn = {extras = ["standard"], version = "^0.31.1"}
 
 [tool.poetry.dev-dependencies]
 pyright = "*"

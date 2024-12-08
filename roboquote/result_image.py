@@ -52,6 +52,7 @@ def generate_image(options: GenerateOptions) -> Image.Image:
     draw.multiline_text(
         fill=text_color,
         stroke_fill="#000000" if text_color == "#FFFFFF" else "#FFFFFF",
+        stroke_width=4,
         **common_args,
     )
 

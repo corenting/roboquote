@@ -10,7 +10,7 @@ FONTS_PATH = "fonts"
 # Ordered by preferred models
 AVAILABLE_LARGE_LANGUAGE_MODELS = [
     LargeLanguageModel(
-        name="llama-3.1-70b-versatile",
+        name="llama-3.3-70b-versatile",
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(

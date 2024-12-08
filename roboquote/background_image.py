@@ -41,7 +41,7 @@ async def get_random_background_from_unsplash_by_theme(
     async with httpx.AsyncClient(verify=context) as client:
         url = (
             "https://unsplash.com/napi/search/photos?orientation=landscape&page=1"
-            f"&per_page=10&plus=none&query={background_search_query} background"
+            f"&per_page=10&plus=none&query={background_search_query}"
             "&xp=search-disable-curation:experiment"
         )
         logger.debug(f"Background API query: {url}")

@@ -39,7 +39,7 @@ function onGenerateError(error) {
 	setStopLoading(true, error);
 }
 
-function handleGeneration(background, text_model, blur) {
+function handleGeneration(background, text_model, quote_language, blur) {
 	setStartLoading();
 
 	// Get HTML elements
@@ -53,6 +53,9 @@ function handleGeneration(background, text_model, blur) {
 	}
 	if (text_model) {
 		queryParams.text_model = text_model;
+	}
+	if (quote_language) {
+		queryParams.quote_language = quote_language;
 	}
 	if (blur) {
 		queryParams.blur = blur;
@@ -111,10 +114,11 @@ function onGenerateClick(evt) {
 	const formParameters = Object.fromEntries(new FormData(evt.target));
 	const background = formParameters.background;
 	const textModel = formParameters.text_model;
+	const quoteLanguage = formParameters.quote_language;
 	const blur = formParameters.blur;
 
 	try {
-		handleGeneration(background, textModel, blur);
+		handleGeneration(background, textModel, quoteLanguage, blur);
 	} catch (error) {
 		console.log("Error during generation", error);
 	}

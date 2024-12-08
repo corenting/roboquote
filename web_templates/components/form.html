@@ -4,11 +4,16 @@
 
         <fieldset role="grid">
             <label for="background">
-                Background theme (optional, will be random if not provided or empty)
+                Background theme (optional, will be random by default)
                 <input type="text" id="background" name="background" placeholder="Paris">
                 <small id="background-helper">
                     Try simple terms like &quot;beach&quot;, &quot;sunrise&quot;, &quot;sea&quot;...
                 </small>
+            </label>
+
+            <label for="quote_language">
+                Quote language (optional, the quote will be in english by default)
+                <input type="text" id="quote_language" name="quote_language" placeholder="english">
             </label>
 
             <label for="text_model">

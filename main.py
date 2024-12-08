@@ -71,7 +71,7 @@ def generate(
     )
 
     # Get text to use
-    text = asyncio.run(get_random_quote(background, large_language_model))
+    text = asyncio.run(get_random_quote(background, large_language_model, "english"))
 
     # Generate and save image
     generated_image = generate_image(

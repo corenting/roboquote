@@ -30,7 +30,7 @@ def get_font_for_image(image_width: int) -> FreeTypeFont:
 
 
 def get_dominant_color(
-    image: Image.Image, bounding_box: tuple[int, int, int, int]
+    image: Image.Image, bounding_box: tuple[float, float, float, float]
 ) -> tuple[int, int, int, int]:
     """Get the dominant color of an image as a tuple, for the given bounding box."""
     img = image.copy()

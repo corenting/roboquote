@@ -23,17 +23,23 @@ from roboquote.result_image import generate_image
 async def generate(request: Request) -> Response:
     """For a given request, generate the corresponding quote image."""
 
-    # Get request parameters
     if len(request.query_params.get("background", "")) > 0:
         background = str(request.query_params["background"])
     else:
         background = get_random_background_search_query()
+
     text_model = next(
         model
         for model in AVAILABLE_LARGE_LANGUAGE_MODELS
         if model.name == str(request.query_params["text_model"])
     )
+
     blur: bool = True if request.query_params.get("blur", "on") == "on" else False
+    quote_language: str = (
+        request.query_params.get("quote_language", "english")
+        if request.query_params.get("quote_language")
+        else "english"
+    )
 
     # Get background image
     (
@@ -43,7 +49,7 @@ async def generate(request: Request) -> Response:
 
     # Get text to use
     try:
-        text = await get_random_quote(background, text_model)
+        text = await get_random_quote(background, text_model, quote_language)
     except CannotGenerateQuoteError as e:
         raise HTTPException(500, str(e)) from e
 
@@ -70,6 +76,7 @@ async def generate(request: Request) -> Response:
                     "blur": blur,
                     "model_used": text_model.name,
                     "api_used": text_model.api.value,
+                    "language": quote_language,
                 }
             ),
         },

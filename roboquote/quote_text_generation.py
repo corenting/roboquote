@@ -30,15 +30,17 @@ similar to old Tumblr pictures.
 
 The quote must exactly one sentence.
 You must return the quote text directly.
-The quote must be in english.
+The quote must be in {quote_language}.
 Do not include any quote characters such as \", “, « or ” .
 """
 
 
-def _get_random_prompt(background_search_query: str) -> str:
+def _get_random_prompt(background_search_query: str, quote_language: str) -> str:
     """Get a random prompt for the model."""
 
-    prompt = PROMPT_CHAT.format(background_search_query=background_search_query)
+    prompt = PROMPT_CHAT.format(
+        background_search_query=background_search_query, quote_language=quote_language
+    )
 
     # Randomly replace "picture" with "photography"
     if random.randint(0, 1) == 0:
@@ -132,10 +134,10 @@ async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str) -> 
 
 
 async def get_random_quote(
-    background_search_query: str, text_model: LargeLanguageModel
+    background_search_query: str, text_model: LargeLanguageModel, quote_language: str
 ) -> str:
     """For a given background category, get a random quote."""
-    prompt = _get_random_prompt(background_search_query)
+    prompt = _get_random_prompt(background_search_query, quote_language)
     logger.debug(f'Prompt for {text_model.name}: "{prompt}"')
 
     if text_model.api == LargeLanguageModelAPI.GROQ_CLOUD:

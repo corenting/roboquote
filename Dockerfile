@@ -1,37 +1,39 @@
 # Python base (venv and user)
 FROM python:3.13-slim AS base
 
-# Install dependencies and dumb-init
-RUN apt-get update && apt-get install -y build-essential curl dumb-init && rm -rf /var/lib/apt/lists/*
+# Install dumb-init
+RUN apt-get update && apt-get install -y dumb-init
 
+# Create user
 RUN useradd -m roboquote && \
     mkdir /app/ && \
     chown -R roboquote /app/
 USER roboquote
 
-# Install Poetry
-ENV PATH="${PATH}:/home/roboquote/.local/bin"
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    poetry config virtualenvs.in-project true
-
 # Dependencies
 WORKDIR /app/
-COPY ./pyproject.toml ./poetry.lock /app/
-RUN poetry install --no-interaction --no-ansi --no-root --only main
-
+COPY . /app/
+ENV CPPFLAGS=-I/usr/local/include/python3.13/ \
+    PATH=/home/roboquote/.local/bin:$PATH
+RUN /usr/local/bin/pip install --user .
 
 # Prod image (app and default config)
-FROM python:3.13-slim as prod
+FROM python:3.13-slim AS prod
 
+COPY --from=base /home/roboquote/.local /home/roboquote/.local
 COPY --from=base /usr/bin/dumb-init /usr/bin/
 COPY --from=base /app /app
 
-WORKDIR /app/
-
 # User
 RUN useradd -m roboquote && \
-    chown -R roboquote /app/
+    chown -R roboquote /app/ && \
+    chown -R roboquote /home/roboquote/
 USER roboquote
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH=/home/roboquote/.local/bin:$PATH
+WORKDIR /app/
 
 # App
 COPY roboquote /app/roboquote
@@ -44,4 +46,5 @@ ENV LOG_LEVEL=WARNING
 
 # Expose and run app
 EXPOSE 8080
-CMD ["dumb-init", "/app/.venv/bin/uvicorn", "roboquote.web.app:app", "--workers", "2", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["uvicorn", "roboquote.web.app:app", "--workers", "2", "--host", "0.0.0.0", "--port", "8080"]

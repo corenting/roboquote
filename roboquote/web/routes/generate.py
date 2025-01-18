@@ -14,7 +14,10 @@ from roboquote.background_image import (
     get_random_background_search_query,
 )
 from roboquote.constants import AVAILABLE_LARGE_LANGUAGE_MODELS
-from roboquote.entities.exceptions import CannotGenerateQuoteError
+from roboquote.entities.exceptions import (
+    CannotFetchBackgroundError,
+    CannotGenerateQuoteError,
+)
 from roboquote.entities.generate_options import GenerateOptions
 from roboquote.quote_text_generation import get_random_quote
 from roboquote.result_image import generate_image
@@ -42,10 +45,13 @@ async def generate(request: Request) -> Response:
     )
 
     # Get background image
-    (
-        background_image,
-        background_image_credits,
-    ) = await get_random_background_from_unsplash_by_theme(background)
+    try:
+        (
+            background_image,
+            background_image_credits,
+        ) = await get_random_background_from_unsplash_by_theme(background)
+    except CannotFetchBackgroundError as e:
+        raise HTTPException(500, "Could not fetch background picture") from e
 
     # Get text to use
     try:

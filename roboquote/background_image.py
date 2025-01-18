@@ -1,11 +1,9 @@
 """Functions to get a background for the result image."""
 
 import random
-import ssl
 from io import BytesIO
 
-import certifi
-import httpx
+from curl_cffi.requests import AsyncSession
 from loguru import logger
 from PIL import Image
 
@@ -33,21 +31,12 @@ async def get_random_background_from_unsplash_by_theme(
 ) -> tuple[Image.Image, ImageCredits]:
     """Get a random background given a search query."""
 
-    # The default httpx verify context doesn't work with
-    # unsplash, it results in 403 errors
-    context = ssl.create_default_context()
-    context.load_verify_locations(certifi.where())
-
-    async with httpx.AsyncClient(verify=context) as client:
-        url = (
-            "https://unsplash.com/napi/search/photos?orientation=landscape&page=1"
-            f"&per_page=10&plus=none&query={background_search_query}"
-            "&xp=search-disable-curation:experiment"
-        )
+    async with AsyncSession() as client:
+        url = f"https://unsplash.com/napi/search/photos?orientation=landscape&page=1&per_page=20&plus=none&query={background_search_query}"
         logger.debug(f"Background API query: {url}")
-        response = await client.get(url)
+        response = await client.get(url, impersonate="chrome")
 
-    if not response.is_success:
+    if not response.ok:
         logger.debug(
             f"Error {response.status_code} from Unsplash API",
         )
@@ -59,7 +48,7 @@ async def get_random_background_from_unsplash_by_theme(
     random_background = random.choice(items)
     picture_url = random_background["urls"]["full"]
 
-    async with httpx.AsyncClient() as client:
+    async with AsyncSession() as client:
         image_response = await client.get(picture_url)
     image = Image.open(BytesIO(image_response.content))
     credits = ImageCredits(

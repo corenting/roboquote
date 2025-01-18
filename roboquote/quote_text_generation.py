@@ -4,7 +4,8 @@ import json
 import random
 import re
 
-import httpx
+from curl_cffi.requests import AsyncSession
+from curl_cffi.requests.exceptions import Timeout
 from loguru import logger
 
 from roboquote import config
@@ -98,7 +99,7 @@ async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str) -> 
     }
     data = {"messages": [{"role": "user", "content": prompt}], "model": model.name}
 
-    async with httpx.AsyncClient() as client:
+    async with AsyncSession() as client:
         try:
             response = await client.post(
                 "https://api.groq.com/openai/v1/chat/completions",
@@ -106,16 +107,16 @@ async def _get_quote_from_groq_cloud(model: LargeLanguageModel, prompt: str) -> 
                 json=data,
                 timeout=15,
             )
-        except httpx.TimeoutException as e:
+        except Timeout as e:
             raise CannotGenerateQuoteError("Timeout when calling GroqCloud API") from e
 
     # Error case with error message
-    if not response.is_success:
+    if not response.ok:
         error = "Unknown error"
         try:
             error: str = response.json()["error"]
         except (KeyError, json.JSONDecodeError):
-            error = response.reason_phrase
+            error = response.reason
         finally:
             raise CannotGenerateQuoteError(
                 f'Error when calling GroqCloud API: "{error}"'

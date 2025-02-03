@@ -14,7 +14,7 @@ AVAILABLE_LARGE_LANGUAGE_MODELS = [
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(
-        name="gemma2-9b-it",
+        name="deepseek-r1-distill-llama-70b",
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(

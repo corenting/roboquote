@@ -4,7 +4,7 @@ Generate random "inspirational" quotes images by using an AI text generation mod
 
 The following models can be used:
 - [meta-llama/Llama-3.3-70B](https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md) through [GroqCloud API](https://console.groq.com/playground)
-- [google/gemma-2-9b-it](https://huggingface.co/google/gemma-2-9b-it) through [GroqCloud API](https://console.groq.com/playground)
+- [deepseek-ai/DeepSeek-R1-Distill-Llama-70B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B) through [GroqCloud API](https://console.groq.com/playground)
 - [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1) through [GroqCloud API](https://console.groq.com/playground)
 
 ## Examples
@@ -43,8 +43,8 @@ It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvico
 ## Credits
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
+- [DeepSeek](https://www.deepseek.com/) for the DeepSeek model used
 - [Google Fonts](https://fonts.google.com/) for the fonts used in the pictures
-- [Google](https://huggingface.co/google) for the Gemma model used
 - [Groq](https://groq.com/) for their inference API
 - [Meta](https://huggingface.co/meta-llama) for the Llama model used
 - [Mistral AI](https://mistral.ai/) for the Mistral model used

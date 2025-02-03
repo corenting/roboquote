@@ -58,8 +58,12 @@ def _cleanup_text(generated_text: str) -> str:
     Remove quotes, and limit the text to the first sentence.
     """
     logger.debug(f'Cleaning up quote: "{generated_text}"')
-
     cleaned_quote = generated_text.strip()
+
+    # Remove "thoughts" for DeepSeek
+    if "<think>" in cleaned_quote and "</think>" in cleaned_quote:
+        cleaned_quote = re.search(r"</think>\s*(.*)", cleaned_quote, re.DOTALL).group(1)
+
     regex_quotes_list = r"\"\“\«\”"
 
     # First, if we match only one quote, return this one

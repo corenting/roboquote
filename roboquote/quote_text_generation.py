@@ -61,8 +61,8 @@ def _cleanup_text(generated_text: str) -> str:
     cleaned_quote = generated_text.strip()
 
     # Remove "thoughts" for DeepSeek
-    if "<think>" in cleaned_quote and "</think>" in cleaned_quote:
-        cleaned_quote = re.search(r"</think>\s*(.*)", cleaned_quote, re.DOTALL).group(1)
+    if match := re.search(r"</think>\s*(.*)", cleaned_quote, re.DOTALL):
+        cleaned_quote = match.group(1)
 
     regex_quotes_list = r"\"\“\«\”"
 

@@ -87,7 +87,16 @@ function handleGeneration(background, text_model, quote_language, blur) {
 						response.headers.get("x-generation-parameters"),
 					);
 
-					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${pictureCredits.first_name} ${pictureCredits.last_name} on Unsplash</a>.<br />
+					// Build name
+					let name = "";
+					if (pictureCredits.first_name != null) {
+						name = pictureCredits.first_name;
+					}
+					if (pictureCredits.last_name != null) {
+						name += ` ${pictureCredits.first_name}`;
+					}
+
+					captionResultElement.innerHTML = `Background picture by <a href='${pictureCredits.url}'>${name} on Unsplash</a>.<br />
 					Generated with ${generationInfo.model_used} on ${generationInfo.api_used}.
 					`;
 				});

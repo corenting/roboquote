@@ -116,6 +116,7 @@ function handleGeneration(background, text_model, quote_language, blur) {
 		});
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: used in template
 function onGenerateClick(evt) {
 	evt.preventDefault();
 

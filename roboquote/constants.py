@@ -10,7 +10,7 @@ FONTS_PATH = "fonts"
 # Ordered by preferred models
 AVAILABLE_LARGE_LANGUAGE_MODELS = [
     LargeLanguageModel(
-        name="llama-3.3-70b-versatile",
+        name="openai/gpt-oss-120b",
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(
@@ -18,7 +18,7 @@ AVAILABLE_LARGE_LANGUAGE_MODELS = [
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
     LargeLanguageModel(
-        name="mixtral-8x7b-32768",
+        name="llama-3.3-70b-versatile",
         api=LargeLanguageModelAPI.GROQ_CLOUD,
     ),
 ]

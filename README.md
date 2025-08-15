@@ -3,9 +3,9 @@
 Generate random "inspirational" quotes images by using an AI text generation model.
 
 The following models can be used:
-- [meta-llama/Llama-3.3-70B](https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md) through [GroqCloud API](https://console.groq.com/playground)
+- [openai/gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b) through [GroqCloud API](https://console.groq.com/playground)
 - [deepseek-ai/DeepSeek-R1-Distill-Llama-70B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B) through [GroqCloud API](https://console.groq.com/playground)
-- [mistralai/Mixtral-8x7B-Instruct-v0.1](https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1) through [GroqCloud API](https://console.groq.com/playground)
+- [meta-llama/Llama-3.3-70B](https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md) through [GroqCloud API](https://console.groq.com/playground)
 
 ## Examples
 
@@ -43,9 +43,6 @@ It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvico
 ## Credits
 
 - [atomicparade](https://github.com/atomicparade) for the [code used to do the text auto wrapping](https://github.com/atomicparade/pil_autowrap/blob/main/pil_autowrap/pil_autowrap.py)
-- [DeepSeek](https://www.deepseek.com/) for the DeepSeek model used
 - [Google Fonts](https://fonts.google.com/) for the fonts used in the pictures
-- [Groq](https://groq.com/) for their inference API
-- [Meta](https://huggingface.co/meta-llama) for the Llama model used
-- [Mistral AI](https://mistral.ai/) for the Mistral model used
 - [Unsplash](unsplash.com) for the background images
+- The authors and providers of the AI models listed above

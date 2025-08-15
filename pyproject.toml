@@ -1,6 +1,6 @@
 [project]
 name = "roboquote"
-version = "0.6.1"
+version = "0.7.0"
 description = "A generator of inspirational quotes"
 authors = [
     { name = "corenting", email = "corenting@gmail.com" },

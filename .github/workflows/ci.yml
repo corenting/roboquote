@@ -18,13 +18,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v5
     - name: Install Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: 18
     - name: Install Poetry
       run: pipx install poetry
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.13"
         cache: 'poetry'

@@ -10,9 +10,13 @@ RUN useradd -m roboquote && \
     chown -R roboquote /app/
 USER roboquote
 
-# Dependencies
+# Create a fake roboquote package to install dependencies
 WORKDIR /app/
-COPY . /app/
+RUN mkdir /app/roboquote
+COPY roboquote/__init__.py /app/roboquote/
+
+# Install dependencies with poetry with only the needed files
+COPY pyproject.toml poetry.lock README.md /app/
 ENV CPPFLAGS=-I/usr/local/include/python3.13/ \
     PATH=/home/roboquote/.local/bin:$PATH
 RUN /usr/local/bin/pip install --user .
@@ -22,7 +26,8 @@ FROM python:3.13-slim AS prod
 
 COPY --from=base /home/roboquote/.local /home/roboquote/.local
 COPY --from=base /usr/bin/dumb-init /usr/bin/
-COPY --from=base /app /app
+
+WORKDIR /app/
 
 # User
 RUN useradd -m roboquote && \
@@ -33,7 +38,6 @@ USER roboquote
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH=/home/roboquote/.local/bin:$PATH
-WORKDIR /app/
 
 # App
 COPY roboquote /app/roboquote

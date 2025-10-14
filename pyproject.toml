@@ -5,7 +5,8 @@ description = "A generator of inspirational quotes"
 authors = [
     { name = "corenting", email = "corenting@gmail.com" },
 ]
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 

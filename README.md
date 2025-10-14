@@ -22,6 +22,7 @@ The following models can be used:
 ## Usage
 
 ### Installation
+
 1. Install the project with [poetry](https://python-poetry.org/) by doing `poetry install`.
 2. Set environment variables for configuration (the project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files)):
     - `GROQ_CLOUD_API_KEY` (**required**): your GroqCloud API key for their API

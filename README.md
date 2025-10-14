@@ -21,7 +21,8 @@ The following models can be used:
 
 ## Usage
 
-### Installation
+### Setup
+
 1. Install the project with [poetry](https://python-poetry.org/) by doing `poetry install`.
 2. Set environment variables for configuration (the project uses [environs](https://github.com/sloria/environs) so you can also put the variable in a [env file](https://github.com/sloria/environs#reading-env-files)):
     - `GROQ_CLOUD_API_KEY` (**required**): your GroqCloud API key for their API
@@ -39,6 +40,17 @@ See `poetry run python main.py --help` for the available options.
 The web version is a [Starlette](https://pypi.org/project/starlette/) application (`roboquote.web.app:app`).
 
 It can be launched quickly locally with [uvicorn](https://pypi.org/project/uvicorn/) through the `make run-web` command.
+
+A Docker image is also available: at [ghcr.io/corenting/roboquote](https://github.com/corenting/roboquote/pkgs/container/roboquote) on Github or
+[corentingarcia/roboquote](https://hub.docker.com/r/corentingarcia/roboquote) on Docker Hub.
+
+You can find an example of a `docker-compose.yml` file [here](./doc/deployment/docker-compose.yml).
+
+## Local development
+
+Tooling is managed through [mise](https://github.com/jdx/mise).
+
+A `Makefile` is provided to quickly run basic tasks (linting, formatting, running the web app etc.).
 
 ## Credits
 

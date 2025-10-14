@@ -1,0 +1,15 @@
+services:
+  roboquote:
+    image: ghcr.io/corenting/roboquote:dev
+    restart: unless-stopped
+    command: ["uvicorn", "roboquote.web.app:app", "--workers", "2", "--host", "0.0.0.0", "--port", "8080"]
+    # If exposing behind a reverse proxy, replace `<comma_separated_list_of_proxy_ips>` by
+    # the list of IPs used by the reverse proxy for the app to work properly.
+    # If the IP changes, or cannot be determined, you can use `*` to disable the proxy IP verification.
+    # This can lead to IP spoofing and other issues, and is only safe if the container is not exposed to
+    # the internet and you trust where the traffic is coming from, or if you have other means of
+    # verifying the forwarded IP header.
+    #command: ["uvicorn", "roboquote.web.app:app", "--workers", "2", "--host", "0.0.0.0", "--port", "8080", "--forwarded-allow-ips", "<comma_separated_list_of_proxy_ips>"]
+    volumes:
+        # Mount an environment file to provide `GROQ_CLOUD_API_KEY`
+        - /app/local.env:/.env
